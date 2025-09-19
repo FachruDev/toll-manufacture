@@ -1,7 +1,7 @@
 @php($title = 'Customer Dashboard')
-<x-layouts.app :title="$title">
+<x-layouts.dashboard :title="$title">
     <div class="p-4">
-        <x-breadcrumb :items="[['label'=>'Home','url'=>route('home')],['label'=>'Customer']]" />
+        <x-breadcrumbs :items="[['label'=>'Home','url'=>route('home')],['label'=>'Customer']]" />
 
         <x-card shadow>
             <x-slot:title>
@@ -12,6 +12,16 @@
                 <x-button class="btn-primary bg-blue-600 border-blue-600">Action Placeholder</x-button>
             </div>
         </x-card>
-    </div>
-</x-layouts.app>
 
+        @if(! auth()->user()->hasVerifiedEmail())
+            <x-alert icon="o-exclamation-triangle" class="mt-4" title="Email belum terverifikasi. Akses fitur lain akan dibatasi.">
+                <x-slot:actions>
+                    <form method="POST" action="{{ route('verification.send') }}">
+                        @csrf
+                        <x-button size="sm" class="btn-primary bg-blue-600 border-blue-600">Kirim Ulang Link</x-button>
+                    </form>
+                </x-slot:actions>
+            </x-alert>
+        @endif
+    </div>
+</x-layouts.dashboard>

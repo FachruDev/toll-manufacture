@@ -13,9 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Spatie Permission middlewares
         $middleware->alias([
-            'role' => Spatie\Permission\Middlewares\RoleMiddleware::class,
-            'permission' => Spatie\Permission\Middlewares\PermissionMiddleware::class,
-            'roles' => Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'verified' => Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

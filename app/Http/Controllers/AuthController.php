@@ -23,6 +23,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            if ($user->hasRole('customer') && !$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice');
+            }
+
             if ($user->hasAnyRole(['superadmin','admin','dephead','supervisor'])) {
                 return redirect()->intended('/admin');
             }
@@ -43,4 +47,3 @@ class AuthController extends Controller
         return redirect('/login');
     }
 }
-

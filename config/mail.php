@@ -14,7 +14,8 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    // Always use SMTP by default. Runtime values are loaded from DB (mail_settings).
+    'default' => 'smtp',
 
     /*
     |--------------------------------------------------------------------------
@@ -39,14 +40,14 @@ return [
 
         'smtp' => [
             'transport' => 'smtp',
-            'scheme' => env('MAIL_SCHEME'),
-            'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', '127.0.0.1'),
-            'port' => env('MAIL_PORT', 2525),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'scheme' => null,
+            'url' => null,
+            'host' => 'localhost',
+            'port' => 25,
+            'username' => null,
+            'password' => null,
             'timeout' => null,
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => null,
         ],
 
         'ses' => [
@@ -110,9 +111,10 @@ return [
     |
     */
 
+    // Will be overridden by DB mail settings
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => 'no-reply@example.local',
+        'name' => config('app.name', 'Laravel'),
     ],
 
 ];

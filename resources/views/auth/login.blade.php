@@ -20,10 +20,14 @@
                 </div>
             </form>
 
+            <div class="flex justify-between items-center mt-3">
+                <a class="link link-primary" href="{{ route('password.request') }}">Lupa password?</a>
+                <a class="link link-primary" href="{{ route('register') }}">Daftar customer</a>
+            </div>
+
             @error('email')
                 <x-alert class="mt-4" icon="o-exclamation-triangle" title="{{ $message }}" dismissible />
             @enderror
         </x-card>
     </div>
 </x-layouts.app>
-
