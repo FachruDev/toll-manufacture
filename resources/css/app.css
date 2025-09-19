@@ -17,21 +17,17 @@
     The lines below were added by maryUI installer.
 */
 
-/** daisyUI */
+/* daisyUI */
 @plugin "daisyui" {
-    themes: light --default;
+    themes: light --default, dark --prefersdark;
 }
+
+/* Dark theme variant support */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* maryUI */
 @source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
 
-/* Theme toggle - disabled dark mode */
-/* @custom-variant dark (&:where(.dark, .dark *)); */
-
-/**
-* Paginator - Traditional style
-* Because Laravel defaults does not match well the design of daisyUI.
-*/
 
 .mary-table-pagination span[aria-current="page"] > span {
     @apply bg-primary text-base-100

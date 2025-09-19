@@ -59,4 +59,3 @@ class RolesAndUsersSeeder extends Seeder
         }
     }
 }
-

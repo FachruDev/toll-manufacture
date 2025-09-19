@@ -1,5 +1,4 @@
-@php($title = 'Customer Dashboard')
-<x-layouts.dashboard :title="$title">
+<x-layouts.dashboard>
     <div class="p-4">
         <x-breadcrumbs :items="[['label'=>'Home','url'=>route('home')],['label'=>'Customer']]" />
 

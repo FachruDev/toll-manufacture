@@ -56,6 +56,11 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::get('/settings/mail', [MailSettingController::class, 'edit'])->name('admin.settings.mail.edit');
     Route::put('/settings/mail', [MailSettingController::class, 'update'])->name('admin.settings.mail.update');
     Route::post('/settings/mail/test', [MailSettingController::class, 'sendTest'])->name('admin.settings.mail.test');
+
+    // Profile
+    Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('admin.profile.update');
+    Route::post('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'changePassword'])->name('admin.profile.password');
 });
 
 // Customer panel

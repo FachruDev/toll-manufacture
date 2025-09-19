@@ -25,7 +25,7 @@
     {{-- MAIN --}}
     <x-main>
         {{-- SIDEBAR --}}
-        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
+        <x-slot:sidebar drawer="main-drawer" class="bg-base-100 lg:bg-inherit" collapsible right-mobile>
 
             {{-- BRAND --}}
             <x-app-brand class="px-5 pt-4" />
@@ -39,8 +39,26 @@
 
                     <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
                         <x-slot:actions>
-                            <x-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff" no-wire-navigate link="/logout" />
+                            <x-dropdown align="end">
+                                <x-slot:trigger>
+                                    <x-button icon="o-cog-6-tooth" class="btn-circle btn-ghost btn-xs" tooltip-left="Settings" />
+                                </x-slot:trigger>
+
+                                <x-menu-item icon="o-paint-brush">
+                                    Toggle theme
+                                </x-menu-item>
+                                <x-menu-item icon="o-power" link="/logout">
+                                    Logout
+                                </x-menu-item>
+                            </x-dropdown>
                         </x-slot:actions>
+
+                        <x-slot:title>
+                            <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 w-full inline-flex items-center gap-2">
+                                <x-icon name="o-user-circle" class="w-4 h-4" />
+                                My Profile
+                            </a>
+                        </x-slot:title>
                     </x-list-item>
 
                     <x-menu-separator />

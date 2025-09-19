@@ -1,5 +1,4 @@
-@php($title = 'Admin Dashboard')
-<x-layouts.dashboard :title="$title">
+<x-layouts.dashboard>
     <div class="p-4">
         @if(! auth()->user()->hasVerifiedEmail())
             <x-alert icon="o-exclamation-triangle" class="mb-4" title="Email Anda belum terverifikasi">
@@ -28,6 +27,10 @@
                 <a href="{{ route('admin.settings.mail.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 inline-flex items-center gap-2">
                     <x-icon name="o-envelope" class="w-4 h-4" />
                     Mail Settings
+                </a>
+                <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 inline-flex items-center gap-2">
+                    <x-icon name="o-user-circle" class="w-4 h-4" />
+                    My Profile
                 </a>
             </div>
         </x-card>
