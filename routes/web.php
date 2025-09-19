@@ -11,17 +11,19 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Home
+// Landing page
 Route::get('/', Welcome::class)->name('home');
 
-// Auth
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
-Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+// Admin Auth
+Route::get('/admin/login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'loginAdmin'])->name('admin.login.attempt');
 
-// Customer Registration
-Route::get('/register', [RegisterController::class, 'showCustomerForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'registerCustomer'])->name('register.submit');
+// Customer Auth
+Route::get('/customer/login', [AuthController::class, 'showCustomerLogin'])->name('customer.login');
+Route::post('/customer/login', [AuthController::class, 'loginCustomer'])->name('customer.login.attempt');
+Route::redirect('/login', '/customer/login')->name('login');
+
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Email Verification
 Route::get('/email/verify', function () {

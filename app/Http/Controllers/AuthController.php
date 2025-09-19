@@ -9,10 +9,21 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        return view('auth.login');
+        return redirect()->route('customer.login');
     }
 
     public function login(Request $request)
+    {
+        // Fallback legacy endpoint: redirect to customer login logic
+        return $this->loginCustomer($request);
+    }
+
+    public function showAdminLogin()
+    {
+        return view('auth.admin-login');
+    }
+
+    public function loginAdmin(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required','email'],
@@ -23,17 +34,41 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if ($user->hasRole('customer') && !$user->hasVerifiedEmail()) {
-                return redirect()->route('verification.notice');
-            }
-
             if ($user->hasAnyRole(['superadmin','admin','dephead','supervisor'])) {
                 return redirect()->intended('/admin');
             }
-            if ($user->hasRole('customer')) {
-                return redirect()->intended('/customer');
+            Auth::logout();
+            return back()->withErrors(['email' => 'Akun ini bukan akun Admin.'])->onlyInput('email');
+        }
+
+        return back()->withErrors(['email' => 'Login gagal. Periksa kredensial.'])->onlyInput('email');
+    }
+
+    public function showCustomerLogin()
+    {
+        return view('auth.customer-login');
+    }
+
+    public function loginCustomer(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            if (! $user->hasRole('customer')) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun ini bukan akun Customer.'])->onlyInput('email');
             }
-            return redirect()->intended('/');
+
+            if (!$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice');
+            }
+            return redirect()->intended('/customer');
         }
 
         return back()->withErrors(['email' => 'Login gagal. Periksa kredensial.'])->onlyInput('email');
@@ -44,6 +79,6 @@ class AuthController extends Controller
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('customer.login');
     }
 }

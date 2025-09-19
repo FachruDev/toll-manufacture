@@ -29,7 +29,6 @@
                     <x-icon name="o-envelope" class="w-4 h-4" />
                     Mail Settings
                 </a>
-                <x-button icon="o-user" class="btn-outline border-blue-600 text-blue-700" href="{{ route('logout') }}">Logout</x-button>
             </div>
         </x-card>
     </div>
