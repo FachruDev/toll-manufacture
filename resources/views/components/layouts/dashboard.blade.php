@@ -38,28 +38,36 @@
                 <x-menu-separator />
 
                 <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
+                    <x-slot:avatar>
+                        @if($user->image_path)
+                            <img src="{{ asset('storage/'.$user->image_path) }}" alt="avatar" class="w-10 h-10 rounded-full object-cover" />
+                        @else
+                            <div class="avatar placeholder">
+                                <div class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                                    <span class="text-sm font-medium">{{ substr($user->name, 0, 1) }}</span>
+                                </div>
+                            </div>
+                        @endif
+                    </x-slot:avatar>
+
                     <x-slot:actions>
-                            <x-dropdown align="end">
-                                <x-slot:trigger>
-                                    <x-button icon="o-cog-6-tooth" class="btn-circle btn-ghost btn-xs" tooltip-left="Settings" />
-                                </x-slot:trigger>
+                        <x-dropdown align="end">
+                            <x-slot:trigger>
+                                <x-button icon="o-cog-6-tooth" class="btn-circle btn-ghost btn-xs" tooltip-left="Settings" />
+                            </x-slot:trigger>
 
-                                <x-menu-item icon="o-paint-brush" onclick="toggleTheme()">
-                                    Toggle theme
-                                </x-menu-item>
-                                <x-menu-item icon="o-power" link="/logout">
-                                    Logout
-                                </x-menu-item>
-                            </x-dropdown>
-                        </x-slot:actions>
-
-                        <x-slot:title>
-                            <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 w-full inline-flex items-center gap-2">
-                                <x-icon name="o-user-circle" class="w-4 h-4" />
+                            <x-menu-item icon="o-user-circle" link="{{ route('admin.profile.edit') }}">
                                 My Profile
-                            </a>
-                        </x-slot:title>
-                    </x-list-item>
+                            </x-menu-item>
+                            <x-menu-item icon="o-paint-brush" onclick="toggleTheme()">
+                                Toggle theme
+                            </x-menu-item>
+                            <x-menu-item icon="o-power" link="/logout">
+                                Logout
+                            </x-menu-item>
+                        </x-dropdown>
+                    </x-slot:actions>
+                </x-list-item>
 
                     <x-menu-separator />
                     @endif

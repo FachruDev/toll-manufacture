@@ -1,5 +1,5 @@
-@php($title = 'Email SMTP Settings')
-<x-layouts.app :title="$title">
+<x-layouts.dashboard>
+
     <div class="p-4 max-w-3xl mx-auto">
         <x-breadcrumbs :items="[['label'=>'Admin','url'=>route('admin.dashboard')],['label'=>'Settings'],['label'=>'Mail']]" />
 
@@ -56,5 +56,8 @@
                 <x-button type="submit" class="btn-primary bg-blue-600 border-blue-600">Kirim</x-button>
             </form>
         </x-card>
+
     </div>
-</x-layouts.app>
+
+
+</x-layouts.dashboard>

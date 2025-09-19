@@ -1,6 +1,5 @@
-@php($title = 'My Profile')
-<x-layouts.app :title="$title">
-    <div class="p-4 max-w-3xl mx-auto">
+<x-layouts.dashboard>
+    <div class="p-4 max-w mx-auto">
         @if(session('success'))
             <x-alert class="mb-4" icon="o-check-circle" title="{{ session('success') }}" />
         @endif
@@ -19,7 +18,12 @@
                     <x-input label="No. Telepon" name="phone" value="{{ old('phone', $user->phone) }}" />
                     <x-select label="Departemen" name="department_id" :options="$departments->map(fn($d)=>['id'=>$d->id,'name'=>$d->name])" :selected="old('department_id', $user->department_id)" placeholder="-" />
                     <div class="md:col-span-2">
-                        <x-file label="Foto Profil" name="image" accept="image/*" />
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text">Foto Profil</span>
+                            </div>
+                            <input type="file" name="image" accept="image/*" class="file-input file-input-bordered w-full" />
+                        </label>
                         @if($user->image_path)
                             <img src="{{ asset('storage/'.$user->image_path) }}" alt="avatar" class="mt-2 w-20 h-20 rounded-full object-cover" />
                         @endif
@@ -45,5 +49,5 @@
             </form>
         </x-card>
     </div>
-</x-layouts.app>
+</x-layouts.dashboard>
 
