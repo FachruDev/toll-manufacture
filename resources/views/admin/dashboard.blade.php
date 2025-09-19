@@ -17,22 +17,5 @@
             <x-stat title="Roles" value="{{ Spatie\Permission\Models\Role::count() }}" icon="o-key" class="bg-blue-500 text-white" />
             <x-stat title="Permissions" value="{{ Spatie\Permission\Models\Permission::count() }}" icon="o-shield-check" class="bg-blue-400 text-white" />
         </div>
-
-        <x-card class="mt-6" shadow>
-            <x-slot:title>
-                <span class="text-blue-700">Quick Links</span>
-            </x-slot:title>
-            <div class="flex gap-3 flex-wrap">
-                <x-button icon="o-cog-6-tooth" class="btn-outline border-blue-600 text-blue-700" href="{{ route('home') }}">Home</x-button>
-                <a href="{{ route('admin.settings.mail.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 inline-flex items-center gap-2">
-                    <x-icon name="o-envelope" class="w-4 h-4" />
-                    Mail Settings
-                </a>
-                <a href="{{ route('admin.profile.edit') }}" class="btn btn-outline border-blue-600 text-blue-700 inline-flex items-center gap-2">
-                    <x-icon name="o-user-circle" class="w-4 h-4" />
-                    My Profile
-                </a>
-            </div>
-        </x-card>
     </div>
 </x-layouts.dashboard>

@@ -35,16 +35,16 @@
 
                 {{-- User --}}
                 @if($user = auth()->user())
-                    <x-menu-separator />
+                <x-menu-separator />
 
-                    <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
-                        <x-slot:actions>
+                <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
+                    <x-slot:actions>
                             <x-dropdown align="end">
                                 <x-slot:trigger>
                                     <x-button icon="o-cog-6-tooth" class="btn-circle btn-ghost btn-xs" tooltip-left="Settings" />
                                 </x-slot:trigger>
 
-                                <x-menu-item icon="o-paint-brush">
+                                <x-menu-item icon="o-paint-brush" onclick="toggleTheme()">
                                     Toggle theme
                                 </x-menu-item>
                                 <x-menu-item icon="o-power" link="/logout">
@@ -62,7 +62,11 @@
                     </x-list-item>
 
                     <x-menu-separator />
-                @endif
+                    @endif
+                {{-- Main Navigation --}}
+                <x-menu-item title="Home" icon="o-home" link="{{ route('home') }}" tooltip-left="Home" />
+                <x-menu-item title="Mail Settings" icon="o-envelope" link="{{ route('admin.settings.mail.edit') }}" tooltip-left="Mail settings" />
+
             </x-menu>
         </x-slot:sidebar>
 
@@ -74,5 +78,22 @@
 
     {{--  TOAST area --}}
     <x-toast />
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
 </body>
 </html>
