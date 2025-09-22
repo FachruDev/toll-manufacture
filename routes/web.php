@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\UserManagement\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserManagement\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\UserManagement\RoleController as AdminRoleController;
+use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -67,6 +69,8 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     // User management (Users & Customers)
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
+    Route::resource('roles', AdminRoleController::class)->except(['show']);
+    Route::resource('permissions', AdminPermissionController::class)->except(['show']);
 });
 
 // Customer panel
