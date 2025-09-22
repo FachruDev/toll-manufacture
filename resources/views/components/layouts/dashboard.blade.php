@@ -11,7 +11,6 @@
 <body class="min-h-screen font-sans antialiased bg-gray-50">
 
     <div class="flex min-h-screen">
-        <!-- Sidebar Panel (Single sidebar with collapse/expand + hover) -->
         <div id="sidebar-panel" class="fixed top-0 bottom-0 left-0 z-50 w-64 bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ease-in-out">
             <x-admin.sidebar-panel />
         </div>
@@ -21,7 +20,6 @@
 
         <!-- Main Content -->
         <div class="flex-1 transition-all duration-300" id="main-content">
-            <!-- Topbar (Sticky for desktop) -->
                 <x-admin.topbar />
 
             <main class="p-6">
