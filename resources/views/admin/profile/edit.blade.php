@@ -1,12 +1,12 @@
 <x-layouts.dashboard>
-    <div class="p-4 max-w-4xl mx-auto">
+    <div class="p-4 max-w mx-auto">
         <div class="card bg-base-100 shadow">
             <div class="card-body">
                 <h2 class="card-title text-blue-700">Profil</h2>
                 <form method="POST" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     @method('PUT')
-                    <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid md:grid-cols-1 gap-6">
                         <label class="form-control">
                             <div class="label"><span class="label-text">Nama</span></div>
                             <input class="input input-bordered" name="name" value="{{ old('name', $user->name) }}" required />
