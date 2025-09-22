@@ -11,22 +11,18 @@
 <body class="min-h-screen font-sans antialiased bg-gray-50">
 
     <div class="flex min-h-screen">
-        <!-- Sidebar Rail (Collapsed State) -->
-        <div id="sidebar-rail" class="hidden">
-            <x-admin.sidebar-rail />
-        </div>
-
-        <!-- Sidebar Panel (Expanded State) - Default -->
-        <div id="sidebar-panel" class="fixed top-0 bottom-0 left-0 z-40 w-64 bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ease-in-out">
+        <!-- Sidebar Panel (Single sidebar with collapse/expand + hover) -->
+        <div id="sidebar-panel" class="fixed top-0 bottom-0 left-0 z-50 w-64 bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ease-in-out">
             <x-admin.sidebar-panel />
         </div>
 
         <!-- Mobile Overlay -->
-        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+        <div id="sidebar-overlay" class="fixed inset-0 z-30 hidden"></div>
 
         <!-- Main Content -->
-        <div class="flex-1 ml-64 transition-all duration-300" id="main-content">
-            <x-admin.topbar />
+        <div class="flex-1 transition-all duration-300" id="main-content">
+            <!-- Topbar (Sticky for desktop) -->
+                <x-admin.topbar />
 
             <main class="p-6">
                 @if(session('success'))
@@ -48,110 +44,191 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const sidebarRail = document.getElementById('sidebar-rail');
         const sidebarPanel = document.getElementById('sidebar-panel');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
         const mainContent = document.getElementById('main-content');
 
-        // Default state: expanded (sidebar-panel visible)
-        let isExpanded = true;
+        // Default state: expanded on desktop, collapsed on mobile
+        let isCollapsed = window.innerWidth < 1024;
+        let isHovering = false;
 
-        function showExpanded() {
-            if (!sidebarPanel || !sidebarRail) return;
+        function setCollapsed() {
+            if (!sidebarPanel) return;
 
-            // Show sidebar-panel, hide sidebar-rail
-            sidebarPanel.classList.remove('hidden');
-            sidebarRail.classList.add('hidden');
-            isExpanded = true;
+            isCollapsed = true;
 
-            // Adjust main content margin
             if (window.innerWidth >= 1024) {
+                // Desktop collapsed: narrow sidebar fixed, main content with padding
+                sidebarPanel.classList.remove('w-64', '-translate-x-full', 'relative');
+                sidebarPanel.classList.add('w-16', 'fixed');
+
+                // Hide only text, keep icons and profile photo
+                const textElements = sidebarPanel.querySelectorAll('.sidebar-text');
+                textElements.forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // Adjust main content padding for desktop
                 if (mainContent) {
-                    mainContent.classList.remove('ml-16');
-                    mainContent.classList.add('ml-64');
+                    mainContent.classList.remove('ml-64', 'pl-64');
+                    mainContent.classList.add('pl-16');
+                }
+
+                // Ensure no overlay on desktop
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('hidden');
                 }
             } else {
-                // Mobile: show overlay
+                // Mobile collapsed: hide sidebar completely
+                sidebarPanel.classList.remove('w-16', 'relative');
+                sidebarPanel.classList.add('w-64', 'fixed', '-translate-x-full');
+
+                // Show all text for when it becomes visible
+                const textElements = sidebarPanel.querySelectorAll('.sidebar-text');
+                textElements.forEach(el => {
+                    el.style.display = '';
+                });
+
+                // Remove margin on mobile
+                if (mainContent) {
+                    mainContent.classList.remove('ml-64', 'ml-16');
+                }
+
+                // Hide overlay
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('hidden');
+                }
+            }
+        }
+
+        function setExpanded() {
+            if (!sidebarPanel) return;
+
+            isCollapsed = false;
+
+            // Show all text elements
+            const textElements = sidebarPanel.querySelectorAll('.sidebar-text');
+            textElements.forEach(el => {
+                el.style.display = '';
+            });
+
+            if (window.innerWidth >= 1024) {
+                // Desktop expanded: sidebar fixed, main content with padding
+                sidebarPanel.classList.remove('w-16', '-translate-x-full', 'relative');
+                sidebarPanel.classList.add('w-64', 'fixed');
+
+                if (mainContent) {
+                    mainContent.classList.remove('ml-16', 'pl-64');
+                    mainContent.classList.add('pl-64');
+                }
+
+                // Ensure no overlay on desktop
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('hidden');
+                }
+            } else {
+                // Mobile expanded: show sidebar with overlay
+                sidebarPanel.classList.remove('w-16', '-translate-x-full', 'relative');
+                sidebarPanel.classList.add('w-64', 'fixed');
+
+                // Remove margin on mobile
+                if (mainContent) {
+                    mainContent.classList.remove('ml-64', 'ml-16');
+                }
+
+                // Show overlay on mobile (transparent, for closing)
                 if (sidebarOverlay) {
                     sidebarOverlay.classList.remove('hidden');
                 }
-                document.body.style.overflow = 'hidden';
             }
-        }
-
-        function showCollapsed() {
-            if (!sidebarPanel || !sidebarRail) return;
-
-            // Show sidebar-rail, hide sidebar-panel
-            sidebarPanel.classList.add('hidden');
-            sidebarRail.classList.remove('hidden');
-            isExpanded = false;
-
-            // Adjust main content margin
-            if (mainContent) {
-                mainContent.classList.remove('ml-64');
-                mainContent.classList.add('ml-16');
-            }
-
-            // Hide overlay
-            if (sidebarOverlay) {
-                sidebarOverlay.classList.add('hidden');
-            }
-            document.body.style.overflow = '';
         }
 
         function toggleSidebar() {
-            if (isExpanded) {
-                showCollapsed();
+            if (isCollapsed) {
+                setExpanded();
             } else {
-                showExpanded();
+                setCollapsed();
             }
         }
 
-        // Event listeners
+        // Toggle button event
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', toggleSidebar);
         }
 
+        // Close button event (in sidebar header)
+        if (sidebarClose) {
+            sidebarClose.addEventListener('click', function() {
+                setCollapsed();
+            });
+        }
+
+        // Hover events for collapsed state (desktop only)
+        if (sidebarPanel) {
+            sidebarPanel.addEventListener('mouseenter', function() {
+                if (isCollapsed && window.innerWidth >= 1024) {
+                    isHovering = true;
+                    setExpanded();
+                }
+            });
+
+            sidebarPanel.addEventListener('mouseleave', function() {
+                if (isCollapsed && isHovering && window.innerWidth >= 1024) {
+                    isHovering = false;
+                    setCollapsed();
+                }
+            });
+        }
+
+        // Mobile overlay click
         if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', showCollapsed);
+            sidebarOverlay.addEventListener('click', function() {
+                if (window.innerWidth < 1024) {
+                    setCollapsed();
+                }
+            });
         }
 
         // ESC key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && isExpanded) {
-                showCollapsed();
+            if (e.key === 'Escape') {
+                setCollapsed();
             }
         });
 
         // Handle resize
         window.addEventListener('resize', function() {
-            if (isExpanded) {
-                if (window.innerWidth >= 1024) {
-                    // Desktop: hide overlay, show expanded
-                    if (sidebarOverlay) sidebarOverlay.classList.add('hidden');
-                    document.body.style.overflow = '';
-                    if (mainContent) {
-                        mainContent.classList.remove('ml-16');
-                        mainContent.classList.add('ml-64');
-                    }
+            const wasCollapsed = isCollapsed;
+
+            if (window.innerWidth >= 1024) {
+                // Switching to desktop
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('hidden');
+                }
+
+                if (wasCollapsed) {
+                    setCollapsed(); // Apply desktop collapsed styles
                 } else {
-                    // Mobile: show overlay
-                    if (sidebarOverlay) sidebarOverlay.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                    if (mainContent) {
-                        mainContent.classList.remove('ml-16');
-                        mainContent.classList.add('ml-64');
-                    }
+                    setExpanded(); // Apply desktop expanded styles
+                }
+            } else {
+                // Switching to mobile
+                if (wasCollapsed) {
+                    setCollapsed(); // Apply mobile collapsed styles
+                } else {
+                    setExpanded(); // Apply mobile expanded styles
                 }
             }
         });
 
-        // Initialize default state (expanded)
-        showExpanded();
+        // Initialize state based on screen size
+        if (window.innerWidth >= 1024) {
+            setExpanded(); // Desktop starts expanded
+        } else {
+            setCollapsed(); // Mobile starts collapsed
+        }
     });
-    </script>
-
-</body>
+    </script></body>
 </html>

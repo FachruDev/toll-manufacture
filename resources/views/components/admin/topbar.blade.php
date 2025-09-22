@@ -1,5 +1,5 @@
 <!-- Topbar -->
-<header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4">
+<header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center px-4">
     <!-- Left Side -->
     <div class="flex items-center space-x-4">
         <!-- Sidebar Toggle -->
@@ -8,18 +8,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
         </button>
-
-        <!-- Logo/Title -->
-        <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
-                {{ strtoupper(substr(config('app.name'), 0, 1)) }}
-            </div>
-            <div>
-                <h1 class="text-lg font-semibold text-gray-900">{{ config('app.name') }}</h1>
-                <p class="text-xs text-gray-500 hidden sm:block">Admin Dashboard</p>
-            </div>
-        </div>
     </div>
+
+    <!-- Spacer -->
+    <div class="flex-1"></div>
 
     <!-- Right Side -->
     <div class="flex items-center space-x-4">
