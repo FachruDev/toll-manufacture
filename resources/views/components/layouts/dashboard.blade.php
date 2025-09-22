@@ -62,13 +62,46 @@
             if (window.innerWidth >= 1024) {
                 // Desktop collapsed: narrow sidebar fixed, main content with padding
                 sidebarPanel.classList.remove('w-64', '-translate-x-full', 'relative');
-                sidebarPanel.classList.add('w-16', 'fixed');
+                sidebarPanel.classList.add('w-20', 'fixed');
 
-                // Hide only text, keep icons and profile photo
+                // Hide text elements but show icons and avatar
                 const textElements = sidebarPanel.querySelectorAll('.sidebar-text');
                 textElements.forEach(el => {
                     el.style.display = 'none';
                 });
+
+                // Make icons bigger for collapsed state
+                const icons = sidebarPanel.querySelectorAll('svg');
+                icons.forEach(icon => {
+                    icon.classList.remove('w-5', 'h-5');
+                    icon.classList.add('w-8', 'h-8');
+                });
+
+                // Center menu items for collapsed state
+                const menuItems = sidebarPanel.querySelectorAll('nav a');
+                menuItems.forEach(item => {
+                    item.classList.add('justify-center');
+                    item.classList.remove('px-3');
+                    item.classList.add('px-2');
+                });
+
+                // Show collapsed logo, hide expanded logo
+                const expandedLogo = sidebarPanel.querySelector('.sidebar-logo-expanded');
+                const collapsedLogo = sidebarPanel.querySelector('.sidebar-logo-collapsed');
+                if (expandedLogo) expandedLogo.classList.add('hidden');
+                if (collapsedLogo) collapsedLogo.classList.remove('hidden');
+
+                // Keep user avatar visible but hide user info text
+                const userInfo = sidebarPanel.querySelector('.sidebar-user-info');
+                const avatar = sidebarPanel.querySelector('.sidebar-avatar');
+                if (userInfo) {
+                    userInfo.classList.add('flex', 'justify-center', 'p-4');
+                    userInfo.classList.remove('p-6');
+                }
+                if (avatar) {
+                    avatar.classList.add('w-10', 'h-10');
+                    avatar.classList.remove('w-12', 'h-12');
+                }
 
                 // Adjust main content padding for desktop
                 if (mainContent) {
@@ -90,6 +123,39 @@
                 textElements.forEach(el => {
                     el.style.display = '';
                 });
+
+                // Reset icons to normal size for mobile
+                const icons = sidebarPanel.querySelectorAll('svg');
+                icons.forEach(icon => {
+                    icon.classList.remove('w-8', 'h-8');
+                    icon.classList.add('w-5', 'h-5');
+                });
+
+                // Reset menu items layout for mobile
+                const menuItems = sidebarPanel.querySelectorAll('nav a');
+                menuItems.forEach(item => {
+                    item.classList.remove('justify-center');
+                    item.classList.remove('px-2');
+                    item.classList.add('px-3');
+                });
+
+                // Reset logos for mobile
+                const expandedLogo = sidebarPanel.querySelector('.sidebar-logo-expanded');
+                const collapsedLogo = sidebarPanel.querySelector('.sidebar-logo-collapsed');
+                if (expandedLogo) expandedLogo.classList.remove('hidden');
+                if (collapsedLogo) collapsedLogo.classList.add('hidden');
+
+                // Reset user info for mobile
+                const userInfo = sidebarPanel.querySelector('.sidebar-user-info');
+                const avatar = sidebarPanel.querySelector('.sidebar-avatar');
+                if (userInfo) {
+                    userInfo.classList.remove('flex', 'justify-center', 'p-2');
+                    userInfo.classList.add('p-4');
+                }
+                if (avatar) {
+                    avatar.classList.remove('w-8', 'h-8');
+                    avatar.classList.add('w-10', 'h-10');
+                }
 
                 // Remove margin on mobile
                 if (mainContent) {
@@ -113,6 +179,39 @@
             textElements.forEach(el => {
                 el.style.display = '';
             });
+
+            // Reset icons to normal size for expanded state
+            const icons = sidebarPanel.querySelectorAll('svg');
+            icons.forEach(icon => {
+                icon.classList.remove('w-8', 'h-8');
+                icon.classList.add('w-5', 'h-5');
+            });
+
+            // Reset menu items layout for expanded state
+            const menuItems = sidebarPanel.querySelectorAll('nav a');
+            menuItems.forEach(item => {
+                item.classList.remove('justify-center');
+                item.classList.remove('px-2');
+                item.classList.add('px-3');
+            });
+
+            // Show expanded logo, hide collapsed logo
+            const expandedLogo = sidebarPanel.querySelector('.sidebar-logo-expanded');
+            const collapsedLogo = sidebarPanel.querySelector('.sidebar-logo-collapsed');
+            if (expandedLogo) expandedLogo.classList.remove('hidden');
+            if (collapsedLogo) collapsedLogo.classList.add('hidden');
+
+            // Reset user info layout
+            const userInfo = sidebarPanel.querySelector('.sidebar-user-info');
+            const avatar = sidebarPanel.querySelector('.sidebar-avatar');
+            if (userInfo) {
+                userInfo.classList.remove('flex', 'justify-center', 'p-2');
+                userInfo.classList.add('p-4');
+            }
+            if (avatar) {
+                avatar.classList.remove('w-8', 'h-8');
+                avatar.classList.add('w-10', 'h-10');
+            }
 
             if (window.innerWidth >= 1024) {
                 // Desktop expanded: sidebar fixed, main content with padding
