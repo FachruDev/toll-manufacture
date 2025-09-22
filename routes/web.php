@@ -4,6 +4,8 @@ use App\Livewire\Welcome;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\MailSettingController;
+use App\Http\Controllers\Admin\UserManagement\UserController as AdminUserController;
+use App\Http\Controllers\Admin\UserManagement\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -61,6 +63,10 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('admin.profile.update');
     Route::post('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'changePassword'])->name('admin.profile.password');
+
+    // User management (Users & Customers)
+    Route::resource('users', AdminUserController::class)->except(['show']);
+    Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
 });
 
 // Customer panel
