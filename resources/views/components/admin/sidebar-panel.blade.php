@@ -3,10 +3,8 @@
     <!-- Header -->
     <div class="h-16 flex items-center justify-center px-4 border-b border-gray-200">
         <div id="sidebar-close" class="rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            <!-- Logo untuk expanded state -->
-            <img src="images/sidebar_expanded.png" alt="expanded logo" class="sidebar-logo-expanded sidebar-text w-auto h-8">
-            <!-- Logo untuk collapsed state -->
-            <img src="images/sidebar_collapsed.png" alt="collapsed logo" class="sidebar-logo-collapsed hidden w-8 h-8">
+            <img src="{{ asset('images/sidebar_expanded.png') }}" alt="expanded logo" class="sidebar-logo-expanded sidebar-text w-auto h-8">
+            <img src="{{ asset('images/sidebar_collapsed.png') }}" alt="collapsed logo" class="sidebar-logo-collapsed hidden w-8 h-8">
         </div>
     </div>
 

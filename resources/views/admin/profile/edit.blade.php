@@ -10,7 +10,7 @@
     </div>
     @endif
 
-    <div class="max-w mx-auto p-6"> <!-- HARAM DI UBAH -->
+    <div class="max-w mx-auto p-4">
         <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
 
