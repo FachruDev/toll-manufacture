@@ -20,12 +20,16 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = auth()->user();
+        $request->merge([
+            'department_id' => $request->input('department_id') ?: null,
+        ]);
+
         $data = $request->validate([
             'name' => ['required','string','max:255'],
             'email' => ['required','email','max:255', Rule::unique('users','email')->ignore($user->id)],
             'employee_id' => ['nullable','string','max:255', Rule::unique('users','employee_id')->ignore($user->id)],
             'phone' => ['nullable','string','max:50'],
-            'department_id' => ['nullable','exists:departments,id'],
+            'department_id' => ['nullable','integer','exists:departments,id'],
             'image' => ['nullable','image','max:2048'],
         ]);
 
@@ -52,4 +56,3 @@ class ProfileController extends Controller
         return back()->with('success','Password updated');
     }
 }
-

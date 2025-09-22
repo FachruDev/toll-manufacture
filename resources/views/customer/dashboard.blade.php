@@ -1,26 +1,32 @@
 <x-layouts.dashboard>
     <div class="p-4">
-        <x-breadcrumbs :items="[['label'=>'Home','url'=>route('home')],['label'=>'Customer']]" />
+        <div class="breadcrumbs text-sm mb-3">
+            <ul>
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li>Customer</li>
+            </ul>
+        </div>
 
-        <x-card shadow>
-            <x-slot:title>
-                <span class="text-blue-700">Welcome, {{ auth()->user()->name }}</span>
-            </x-slot:title>
-            <p class="text-sm text-gray-600">Panel customer sederhana. Nantinya form TMR dan status akan tampil di sini.</p>
-            <div class="mt-4">
-                <x-button class="btn-primary bg-blue-600 border-blue-600">Action Placeholder</x-button>
+        <div class="card bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title text-blue-700">Welcome, {{ auth()->user()->name }}</h2>
+                <p class="text-sm text-gray-600">Panel customer sederhana. Nantinya form TMR dan status akan tampil di sini.</p>
+                <div class="mt-4">
+                    <button class="btn btn-primary">Action Placeholder</button>
+                </div>
             </div>
-        </x-card>
+        </div>
 
         @if(! auth()->user()->hasVerifiedEmail())
-            <x-alert icon="o-exclamation-triangle" class="mt-4" title="Email belum terverifikasi. Akses fitur lain akan dibatasi.">
-                <x-slot:actions>
+            <div class="alert alert-warning mt-4">
+                <span>Email belum terverifikasi. Akses fitur lain akan dibatasi.</span>
+                <div>
                     <form method="POST" action="{{ route('verification.send') }}">
                         @csrf
-                        <x-button size="sm" class="btn-primary bg-blue-600 border-blue-600">Kirim Ulang Link</x-button>
+                        <button class="btn btn-sm btn-primary">Kirim Ulang Link</button>
                     </form>
-                </x-slot:actions>
-            </x-alert>
+                </div>
+            </div>
         @endif
     </div>
 </x-layouts.dashboard>

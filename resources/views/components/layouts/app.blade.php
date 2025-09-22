@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
@@ -9,16 +9,17 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200">
-
-    {{-- MAIN --}}
-    <x-main>
-        {{-- The `$slot` goes here --}}
-        <x-slot:content>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-lg">
+            @if(session('success'))
+                <div class="toast toast-top toast-end">
+                    <div class="alert alert-success">
+                        <span>{{ session('success') }}</span>
+                    </div>
+                </div>
+            @endif
             {{ $slot }}
-        </x-slot:content>
-    </x-main>
-
-    {{--  TOAST area --}}
-    <x-toast />
+        </div>
+    </div>
 </body>
 </html>

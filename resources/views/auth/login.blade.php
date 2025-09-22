@@ -1,33 +1,39 @@
 @php($title = 'Login')
 <x-layouts.app :title="$title">
     <div class="max-w-md mx-auto mt-10">
-        <x-card shadow>
-            <x-slot:title>
-                <div class="text-blue-700 font-semibold">Login</div>
-            </x-slot:title>
+        <div class="card bg-base-100 shadow">
+            <div class="card-body">
+                <h2 class="card-title text-blue-700">Login</h2>
 
-            <form method="POST" action="{{ route('login.attempt') }}" class="space-y-4">
-                @csrf
-                <x-input label="Email" name="email" type="email" value="{{ old('email') }}" required class="w-full" />
-                <x-input label="Password" name="password" type="password" required class="w-full" />
-
-                <div class="flex items-center justify-between">
-                    <label class="label cursor-pointer">
-                        <span class="label-text">Remember me</span>
-                        <input type="checkbox" name="remember" class="toggle toggle-primary ml-2" />
+                <form method="POST" action="{{ route('login.attempt') }}" class="space-y-4">
+                    @csrf
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">Email</span></div>
+                        <input class="input input-bordered w-full" name="email" type="email" value="{{ old('email') }}" required />
                     </label>
-                    <x-button type="submit" class="btn-primary bg-blue-600 border-blue-600">Masuk</x-button>
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text">Password</span></div>
+                        <input class="input input-bordered w-full" name="password" type="password" required />
+                    </label>
+
+                    <div class="flex items-center justify-between">
+                        <label class="label cursor-pointer">
+                            <span class="label-text">Remember me</span>
+                            <input type="checkbox" name="remember" class="toggle toggle-primary ml-2" />
+                        </label>
+                        <button type="submit" class="btn btn-primary">Masuk</button>
+                    </div>
+                </form>
+
+                <div class="flex justify-between items-center mt-3">
+                    <a class="link link-primary" href="{{ route('password.request') }}">Lupa password?</a>
+                    <a class="link link-primary" href="{{ route('register') }}">Daftar customer</a>
                 </div>
-            </form>
 
-            <div class="flex justify-between items-center mt-3">
-                <a class="link link-primary" href="{{ route('password.request') }}">Lupa password?</a>
-                <a class="link link-primary" href="{{ route('register') }}">Daftar customer</a>
+                @error('email')
+                    <div class="alert alert-warning mt-4"><span>{{ $message }}</span></div>
+                @enderror
             </div>
-
-            @error('email')
-                <x-alert class="mt-4" icon="o-exclamation-triangle" title="{{ $message }}" dismissible />
-            @enderror
-        </x-card>
+        </div>
     </div>
 </x-layouts.app>

@@ -4,30 +4,15 @@ namespace App\Livewire;
 
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use Mary\Traits\Toast;
 
 class Welcome extends Component
 {
-    use Toast;
 
     public string $search = '';
 
     public bool $drawer = false;
 
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
-
-    // Clear filters
-    public function clear(): void
-    {
-        $this->reset();
-        $this->success('Filters cleared.', position: 'toast-bottom');
-    }
-
-    // Delete action
-    public function delete($id): void
-    {
-        $this->warning("Will delete #$id", 'It is fake.', position: 'toast-bottom');
-    }
 
     // Table headers
     public function headers(): array
