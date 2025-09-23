@@ -30,7 +30,7 @@
         </div>
 
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold">Permission Management</h1>
+            <h1 class="text-2xl font-semibold text-primary">Permission Management</h1>
             <div class="flex items-center gap-4">
                 <form method="GET" action="{{ route('permissions.index') }}" class="flex items-center gap-2">
                     <label for="per_page" class="text-sm font-medium">Show:</label>

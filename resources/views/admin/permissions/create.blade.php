@@ -31,7 +31,7 @@
         </div>
 
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold">Create New Permission</h1>
+            <h1 class="text-2xl font-semibold">Create New Permission</h1>
             <a href="{{ route('permissions.index') }}" class="btn btn-outline btn-neutral">Back to Permissions</a>
         </div>
 
@@ -42,7 +42,7 @@
 
                     <!-- Permission Information Section -->
                     <div class="mb-8">
-                        <h2 class="text-xl font-semibold mb-6">Permission Information</h2>
+                        <h2 class="text-xl font-semibold mb-6 text-primary">Permission Information</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>

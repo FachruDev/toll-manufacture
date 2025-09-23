@@ -42,7 +42,7 @@
 
                     <!-- User Information Section -->
                     <div class="mb-8">
-                        <h2 class="text-xl font-semibold mb-6">User Information</h2>
+                        <h2 class="text-xl font-semibold mb-6 text-primary">User Information</h2>
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
                             <input type="file" name="image" class="w-full file-input file-input-primary" accept="image/*">
