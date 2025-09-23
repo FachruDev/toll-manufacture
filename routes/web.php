@@ -68,6 +68,7 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
     Route::resource('roles', AdminRoleController::class)->except(['show']);
     Route::resource('permissions', AdminPermissionController::class)->except(['show']);
+    Route::post('permissions/bulk-delete', [AdminPermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
 });
 
 // Customer panel
