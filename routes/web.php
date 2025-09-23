@@ -11,9 +11,9 @@ use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermi
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Landing page
 Route::get('/', Welcome::class)->name('home');
@@ -33,11 +33,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->na
 Route::get('/email/verify', function () {
     return view('auth.verify');
 })->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->intended('/');
-})->middleware(['auth', 'signed', 'throttle:6,1'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     if ($request->user()->hasVerifiedEmail()) {
@@ -68,6 +63,8 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
 
     // User management (Users & Customers)
     Route::resource('users', AdminUserController::class)->except(['show']);
+    Route::post('users/bulk-delete', [AdminUserController::class, 'bulkDelete'])->name('users.bulk-delete');
+    Route::post('users/{user}/send-verification', [AdminUserController::class, 'sendVerification'])->name('users.send-verification');
     Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
     Route::resource('roles', AdminRoleController::class)->except(['show']);
     Route::resource('permissions', AdminPermissionController::class)->except(['show']);
@@ -77,3 +74,46 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
     Route::get('/', CustomerDashboardController::class)->name('customer.dashboard');
 });
+
+// Email verification handler
+Route::get('/email/verify/{id}/{hash}', function (Request $request) {
+    $userId = $request->route('id');
+    $hash = $request->route('hash');
+
+    try {
+        // Try to find user in users table first
+        $user = \App\Models\User::find($userId);
+        $isUserTable = true;
+
+        // If not found in users table, try customers table
+        if (!$user) {
+            $user = \App\Models\Customer::find($userId);
+            $isUserTable = false;
+        }
+
+        // If still not found, return error
+        if (!$user) {
+            return redirect()->route('home')->with('error', 'User tidak ditemukan.');
+        }
+
+        // Mark email as verified if not already verified
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            event(new \Illuminate\Auth\Events\Verified($user));
+        }
+
+        // Redirect based on which table the user is from
+        if ($isUserTable) {
+            return redirect()->route('admin.login')->with('success', 'Email berhasil diverifikasi! Silakan login untuk melanjutkan.');
+        } else {
+            return redirect()->route('customer.login')->with('success', 'Email berhasil diverifikasi! Silakan login untuk melanjutkan.');
+        }
+
+    } catch (\Exception $e) {
+        \Log::error('Email verification error', [
+            'error' => $e->getMessage(),
+            'user_id' => $userId
+        ]);
+        return redirect()->route('home')->with('error', 'Terjadi kesalahan saat verifikasi email.');
+    }
+})->name('verification.verify');

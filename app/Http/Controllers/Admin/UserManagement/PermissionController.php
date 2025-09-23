@@ -12,12 +12,12 @@ class PermissionController extends Controller
     public function index()
     {
         $permissions = Permission::orderBy('name')->paginate(30);
-        return response()->view('admin.permissions.index', compact('permissions'));
+        return view('admin.permissions.index', compact('permissions'));
     }
 
     public function create()
     {
-        return response()->view('admin.permissions.create');
+        return view('admin.permissions.create');
     }
 
     public function store(Request $request)
@@ -36,7 +36,7 @@ class PermissionController extends Controller
 
     public function edit(Permission $permission)
     {
-        return response()->view('admin.permissions.edit', compact('permission'));
+        return view('admin.permissions.edit', compact('permission'));
     }
 
     public function update(Request $request, Permission $permission)

@@ -12,13 +12,16 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
         $users = User::query()
             ->whereHas('roles', fn($q) => $q->whereIn('name', ['superadmin','admin','dephead','supervisor']))
             ->with(['roles','department'])
             ->latest('id')
-            ->paginate(12);
+            ->paginate($perPage);
 
         return view('admin.users.index', compact('users'));
     }
@@ -34,7 +37,6 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => ['required','string','max:255'],
-            'username' => ['required','string','max:255','unique:users,username'],
             'email' => ['required','email','max:255','unique:users,email'],
             'password' => ['required','min:8','confirmed'],
             'employee_id' => ['nullable','string','max:255','unique:users,employee_id'],
@@ -57,7 +59,7 @@ class UserController extends Controller
 
         $user->syncRoles($data['roles']);
 
-        return redirect()->route('admin.users.index')->with('success','User created');
+        return redirect()->route('users.index')->with('success','User created successfully!');
     }
 
     public function edit(User $user)
@@ -73,7 +75,6 @@ class UserController extends Controller
         $this->authorizeView($user);
         $data = $request->validate([
             'name' => ['required','string','max:255'],
-            'username' => ['required','string','max:255', Rule::unique('users','username')->ignore($user->id)],
             'email' => ['required','email','max:255', Rule::unique('users','email')->ignore($user->id)],
             'password' => ['nullable','min:8','confirmed'],
             'employee_id' => ['nullable','string','max:255', Rule::unique('users','employee_id')->ignore($user->id)],
@@ -95,14 +96,47 @@ class UserController extends Controller
 
         $user->syncRoles($data['roles']);
 
-        return redirect()->route('admin.users.index')->with('success','User updated');
+        return redirect()->route('users.index')->with('success','User updated successfully!');
     }
 
     public function destroy(User $user)
     {
         $this->authorizeView($user);
         $user->delete();
-        return back()->with('success','User deleted');
+        return back()->with('success','User deleted successfully!');
+    }
+
+    /**
+     * Bulk delete users.
+     */
+    public function bulkDelete(Request $request)
+    {
+        $userIds = $request->input('user_ids', []);
+        if (empty($userIds)) {
+            return back()->with('error', 'No users selected for deletion.');
+        }
+        $users = User::whereIn('id', $userIds)->get();
+        $deletedCount = 0;
+        foreach ($users as $user) {
+            if (!$user->hasRole('customer')) {
+                $user->delete();
+                $deletedCount++;
+            }
+        }
+        return back()->with('success', "$deletedCount user(s) deleted successfully.");
+    }
+
+    public function sendVerification(User $user)
+    {
+        $this->authorizeView($user);
+
+        if ($user->hasVerifiedEmail()) {
+            return back()->with('error', 'User email is already verified');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return back()->with('success', 'Verification email sent successfully to ' . $user->email . '!');
     }
 
     protected function authorizeView(User $user): void
