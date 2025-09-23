@@ -12,7 +12,8 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::query()->with('permissions')->orderBy('name')->paginate(20);
+        $perPage = request('per_page', 10);
+        $roles = Role::query()->with('permissions')->orderBy('name')->paginate($perPage);
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -74,6 +75,25 @@ class RoleController extends Controller
         }
         $role->delete();
         return back()->with('success','Role deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'role_ids' => 'required|array',
+            'role_ids.*' => 'exists:roles,id',
+        ]);
+
+        $roles = Role::whereIn('id', $request->role_ids)->get();
+        foreach ($roles as $role) {
+            if (in_array($role->name, ['superadmin'])) {
+                return back()->withErrors(['name' => 'Cannot delete protected role: ' . $role->name]);
+            }
+        }
+
+        Role::whereIn('id', $request->role_ids)->delete();
+
+        return redirect()->route('roles.index')->with('success', 'Selected roles deleted successfully.');
     }
 }
 
