@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserManagement\UserController as AdminUserControl
 use App\Http\Controllers\Admin\UserManagement\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\UserManagement\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermissionController;
+use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as AdminPermissionCategoryController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -69,15 +70,20 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('admin.profile.update');
     Route::post('/profile/password', [\App\Http\Controllers\Admin\ProfileController::class, 'changePassword'])->name('admin.profile.password');
 
-    // User management (Users & Customers)
+    // User management
     Route::resource('users', AdminUserController::class)->except(['show']);
     Route::post('users/bulk-delete', [AdminUserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::post('users/{user}/send-verification', [AdminUserController::class, 'sendVerification'])->name('users.send-verification');
+
+    // Customer Management
     Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
+
+    // Roles & Permissions
     Route::resource('roles', AdminRoleController::class)->except(['show']);
     Route::post('roles/bulk-delete', [AdminRoleController::class, 'bulkDelete'])->name('roles.bulk-delete');
     Route::resource('permissions', AdminPermissionController::class)->except(['show']);
     Route::post('permissions/bulk-delete', [AdminPermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
+    Route::resource('permission-categories', AdminPermissionCategoryController::class)->parameters(['permission-categories' => 'permission_category'])->except(['show']);
 });
 
 // ===========================================================
