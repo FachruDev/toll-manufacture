@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Auth;
 // Landing page
 Route::get('/', Welcome::class)->name('home');
 
+// ===========================================================
+//                      AUTHENTICATION
+// ===========================================================
+
 // Admin Auth
 Route::get('/admin/login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'loginAdmin'])->name('admin.login.attempt');
@@ -48,7 +52,11 @@ Route::post('/forgot-password', [PasswordController::class, 'sendResetLink'])->m
 Route::get('/reset-password/{token}', [PasswordController::class, 'showReset'])->middleware('guest')->name('password.reset');
 Route::post('/reset-password', [PasswordController::class, 'reset'])->middleware('guest')->name('password.update');
 
-// Admin panel (superadmin, admin, dephead, supervisor)
+// ===========================================================
+//                      ADMIN PANEL
+// ===========================================================
+
+// Admin panel
 Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix('admin')->group(function () {
     Route::get('/', AdminDashboardController::class)->name('admin.dashboard');
     // Settings -> Mail
@@ -72,10 +80,18 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('permissions/bulk-delete', [AdminPermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
 });
 
+// ===========================================================
+//                      CUSTOMER PANEL
+// ===========================================================
+
 // Customer panel
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->group(function () {
     Route::get('/', CustomerDashboardController::class)->name('customer.dashboard');
 });
+
+// ===========================================================
+//                  EMAIL VERIFICATION
+// ===========================================================
 
 // Email verification handler
 Route::get('/email/verify/{id}/{hash}', function (Request $request) {
