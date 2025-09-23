@@ -11,7 +11,8 @@ class PermissionController extends Controller
 {
     public function index()
     {
-        $permissions = Permission::orderBy('name')->paginate(30);
+        $perPage = request('per_page', 10);
+        $permissions = Permission::orderBy('name')->paginate($perPage);
         return view('admin.permissions.index', compact('permissions'));
     }
 
@@ -31,7 +32,7 @@ class PermissionController extends Controller
 
         Permission::create(['name' => $data['name'], 'guard_name' => 'web']);
 
-        return redirect()->route('admin.permissions.index')->with('success','Permission created');
+        return redirect()->route('permissions.index')->with('success','Permission created');
     }
 
     public function edit(Permission $permission)
@@ -50,13 +51,25 @@ class PermissionController extends Controller
 
         $permission->update(['name' => $data['name']]);
 
-        return redirect()->route('admin.permissions.index')->with('success','Permission updated');
+        return redirect()->route('permissions.index')->with('success','Permission updated');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
         return back()->with('success','Permission deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'permission_ids' => 'required|array',
+            'permission_ids.*' => 'exists:permissions,id',
+        ]);
+
+        Permission::whereIn('id', $request->permission_ids)->delete();
+
+        return redirect()->route('permissions.index')->with('success', 'Selected permissions deleted successfully.');
     }
 }
 
