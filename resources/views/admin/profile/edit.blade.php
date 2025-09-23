@@ -1,8 +1,8 @@
 <x-layouts.dashboard>
     @if(session('success'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-success">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+    <div class="fixed top-4 right-4 z-50">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md shadow-md flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <span>{{ session('success') }}</span>
@@ -11,8 +11,8 @@
     @endif
 
     <div class="max-w mx-auto p-4">
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div class="p-6">
 
                 <!-- Profile Information Section -->
                 <div class="mb-12">
@@ -23,85 +23,76 @@
                         @method('PUT')
 
                         <!-- Profile Image -->
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-4 mb-6">
                             @if($user->image_path)
-                                <img src="{{ asset('storage/'.$user->image_path) }}" alt="Profile Image" class="w-20 h-20 rounded-full object-cover">
+                                <img src="{{ asset('storage/'.$user->image_path) }}" alt="Profile Image" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200">
                             @else
-                                <div class="w-20 h-20 rounded-full bg-base-200 flex items-center justify-center">
-                                    <span class="text-base-content/50 text-2xl">?</span>
+                                <div class="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center border-2 border-gray-200">
+                                    <span class="text-gray-400 text-2xl">?</span>
                                 </div>
                             @endif
                             <div>
-                                <label class="label">
-                                    <span class="label-text">Profile Picture</span>
-                                </label>
-                                <input type="file" name="image" accept="image/*" class="file-input file-input-bordered w-full max-w-xs">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
+                                <input type="file" name="image" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-l-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             </div>
                         </div>
 
                         <!-- Form Fields -->
-                        <div class="flex flex-col md:flex-row md:flex-wrap gap-6">
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Full Name</span>
-                                </label>
-                                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="input focus:outline-none" required>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full input input-primary focus:border-none" required>
                                 @error('name')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Email</span>
-                                </label>
-                                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="input focus:outline-none" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full input input-primary focus:border-none" required>
                                 @error('email')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Employee ID</span>
-                                </label>
-                                <input type="text" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" class="input focus:outline-none">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Employee ID</label>
+                                <input type="text" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" class="w-full input input-primary focus:border-none">
                                 @error('employee_id')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Phone Number</span>
-                                </label>
-                                <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" class="input focus:outline-none">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full input input-primary focus:border-none">
                                 @error('phone')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control w-full">
-                                <label class="label">
-                                    <span class="label-text">Department</span>
-                                </label>
-                                <select name="department_id" class="select w-full focus:outline-none">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                                <select name="department_id" class="w-full select select-primary focus:border-none">
                                     <option value="">Select Department</option>
                                     @foreach($departments as $d)
                                         <option value="{{ $d->id }}" {{ (string)old('department_id', (string)($user->department_id ?? '')) === (string)$d->id ? 'selected' : '' }}>{{ $d->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('department_id')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
-                        <div class="card-actions justify-end">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <div class="flex justify-end mt-6">
+                            <button type="submit" class="btn btn-outline btn-primary">Save Changes</button>
                         </div>
                     </form>
                 </div>
+
+                <!-- Divider -->
+                <div class="border-t border-gray-200 my-8"></div>
 
                 <!-- Change Password Section -->
                 <div>
@@ -110,40 +101,34 @@
                     <form method="POST" action="{{ route('admin.profile.password') }}" class="space-y-6">
                         @csrf
 
-                        <div class="flex flex-col md:flex-row md:flex-wrap gap-6">
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Current Password</span>
-                                </label>
-                                <input type="password" name="current_password" class="input focus:outline-none" required>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Current Password *</label>
+                                <input type="password" name="current_password" class="w-full input input-primary focus:border-none" required>
                                 @error('current_password')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">New Password</span>
-                                </label>
-                                <input type="password" name="password" class="input focus:outline-none" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">New Password *</label>
+                                <input type="password" name="password" class="w-full input input-primary focus:border-none" required>
                                 @error('password')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            <div class="form-control flex-1 min-w-0">
-                                <label class="label">
-                                    <span class="label-text">Confirm New Password</span>
-                                </label>
-                                <input type="password" name="password_confirmation" class="input focus:outline-none" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password *</label>
+                                <input type="password" name="password_confirmation" class="w-full input input-primary focus:border-none" required>
                                 @error('password_confirmation')
-                                    <span class="text-error text-sm">{{ $message }}</span>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
 
-                        <div class="card-actions justify-end">
-                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        <div class="flex justify-end mt-6">
+                            <button type="submit" class="btn btn-outline btn-primary">Update Password</button>
                         </div>
                     </form>
                 </div>

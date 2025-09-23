@@ -16,6 +16,7 @@ class RolesAndUsersSeeder extends Seeder
         // Permissions
         $permAdmin = Permission::firstOrCreate(['name' => 'panel.admin.access']);
         $permCustomer = Permission::firstOrCreate(['name' => 'panel.customer.access']);
+        $permManageUsers = Permission::firstOrCreate(['name' => 'manage.users']);
 
         // Roles
         $superadmin = Role::firstOrCreate(['name' => 'superadmin']);
@@ -25,10 +26,10 @@ class RolesAndUsersSeeder extends Seeder
         $customer   = Role::firstOrCreate(['name' => 'customer']);
 
         // Assign permissions to roles
-        $superadmin->givePermissionTo([$permAdmin, $permCustomer]);
-        $admin->givePermissionTo($permAdmin);
-        $dephead->givePermissionTo($permAdmin);
-        $supervisor->givePermissionTo($permAdmin);
+        $superadmin->givePermissionTo([$permAdmin, $permCustomer, $permManageUsers]);
+        $admin->givePermissionTo([$permAdmin, $permManageUsers]);
+        $dephead->givePermissionTo([$permAdmin, $permManageUsers]);
+        $supervisor->givePermissionTo([$permAdmin, $permManageUsers]);
         $customer->givePermissionTo($permCustomer);
 
         // Seed users

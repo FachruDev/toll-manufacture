@@ -35,11 +35,11 @@
                 Home
             </div>
             <a href="{{ route('admin.dashboard') }}" class="flex items-center px-2 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
-                <x-ri-dashboard-line class="mx-2"/>
+                <x-zondicon-dashboard class="mx-2"/>
                 <span class="sidebar-text">Dashboard</span>
             </a>
             <a href="#" class="flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
-                <x-eos-analytics-o class="mx-2"/>
+                <x-zondicon-chart class="mx-2"/>
                 <span class="sidebar-text">Analytics</span>
             </a>
         </div>
@@ -50,7 +50,7 @@
                 Settings
             </div>
             <a href="{{ route('admin.settings.mail.edit') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.settings.mail.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
-                <x-feathericon-mail class="mx-2"/>
+                <x-heroicon-o-envelope class="mx-2"/>
                 <span class="sidebar-text">Mail Settings</span>
             </a>
         </div>
@@ -74,13 +74,13 @@
             @endcan
             @can('manage.users')
             <a href="{{ route('roles.index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('roles.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
-                <x-iconpark-protect-o class="mx-2"/>
+                <x-heroicon-o-shield-check class="mx-2"/>
                 <span class="sidebar-text">Roles</span>
             </a>
             @endcan
             @can('manage.users')
             <a href="{{ route('permissions.index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('permissions.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
-                <x-iconpark-permissions class="mx-2"/>
+                <x-heroicon-o-lock-closed class="mx-2"/>
                 <span class="sidebar-text">Permissions</span>
             </a>
             @endcan

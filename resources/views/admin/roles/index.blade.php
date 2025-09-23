@@ -2,9 +2,7 @@
     @if(session('success'))
     <div class="toast toast-top toast-end z-50">
         <div class="alert alert-success">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+            <x-heroicon-o-check-badge class="h-6 w-6"/>
             <span>{{ session('success') }}</span>
         </div>
     </div>
@@ -13,9 +11,7 @@
     @if(session('error'))
     <div class="toast toast-top toast-end z-50">
         <div class="alert alert-error">
-            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+            <x-heroicon-s-exclamation-triangle class="h-6 w-6"/>
             <span>{{ session('error') }}</span>
         </div>
     </div>
@@ -73,13 +69,13 @@
                                     <td>
                                         <div class="flex space-x-2">
                                             <a href="{{ route('roles.edit', $role) }}" class="tooltip tooltip-top text-warning hover:text-yellow-600 transition duration-200" data-tip="Edit Role">
-                                                <x-feathericon-edit class="w-6 h-6" />
+                                                <x-heroicon-o-pencil-square class="w-6 h-6" />
                                             </a>
                                             <form method="POST" action="{{ route('roles.destroy', $role) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="tooltip tooltip-top text-error cursor-pointer hover:text-red-600 transition duration-200" data-tip="Delete Roles" onclick="return confirm('Are you sure?')">
-                                                    <x-ri-delete-bin-3-line class="w-6 h-6"/>
+                                                    <x-heroicon-s-x-circle class="w-6 h-6"/>
                                                 </button>
                                             </form>
                                         </div>

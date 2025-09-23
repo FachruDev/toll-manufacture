@@ -4,7 +4,7 @@
     <div class="flex items-center space-x-4">
         <!-- Sidebar Toggle -->
         <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
-            <x-microns-right class="w-6 h-6"/>
+            <x-heroicon-o-chevron-right class="w-6 h-6"/>
         </button>
     </div>
 
@@ -24,7 +24,7 @@
 
         <!-- Notifications -->
         <button class="p-2 rounded-lg hover:bg-gray-100 transition-colors relative">
-            <x-monoicon-notification class="w-6  h-6"/>
+            <x-heroicon-s-bell class="w-6  h-6"/>
             <!-- Notification Badge -->
             <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
         </button>
@@ -44,22 +44,22 @@
                     <p class="text-sm font-medium text-gray-900">{{ $user->name }}</p>
                     <p class="text-xs text-gray-500">Admin</p>
                 </div>
-                <x-bytesize-chevron-bottom class="w-4 h-4 text-gray-400"/>
+                <x-heroicon-s-chevron-down class="w-4 h-4 text-gray-400"/>
             </button>
 
             <!-- Dropdown Menu -->
             <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                 <a href="{{ route('admin.profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    <x-css-profile class="w-4 h-4 mr-3"/>
+                    <x-heroicon-s-user-circle class="w-4 h-4 mr-3"/>
                     My Profile
                 </a>
                 <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    <x-eva-settings-outline class="w-4 h-4 mr-3"/>
+                    <x-heroicon-o-cog class="w-4 h-4 mr-3"/>
                     Settings
                 </a>
                 <hr class="my-1">
                 <a href="{{ route('logout') }}" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50">
-                    <x-tabler-logout class="w-4 h-4 mr-3"/>
+                    <x-heroicon-s-arrow-left-end-on-rectangle class="w-4 h-4 mr-3"/>
                     Logout
                 </a>
             </div>
