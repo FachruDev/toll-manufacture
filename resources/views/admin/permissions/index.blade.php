@@ -8,7 +8,7 @@
         </div>
 
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-semibold text-primary">Permission Management</h1>
+            <h1 class="text-2xl font-semibold">Permission Management</h1>
             <div class="flex items-center gap-4">
                 <form method="GET" action="{{ route('permissions.index') }}" class="flex items-center gap-2">
                     <label for="per_page" class="text-sm font-medium">Show:</label>
@@ -20,7 +20,9 @@
                     </select>
                     <span class="text-sm text-gray-500">entries</span>
                 </form>
+                @can('create-permissions')
                 <a href="{{ route('permissions.create') }}" class="btn btn-outline btn-primary">Add Permission</a>
+                @endcan
             </div>
         </div>
 
@@ -46,16 +48,18 @@
                                     <td class="font-medium">{{ $permission->name }}</td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top btn btn-sm btn-ghost" data-tip="Edit Permission">
+                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top btn btn-sm btn-ghost" data-tip="Edit & Detail">
                                                 <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
+                                            @can('delete-permissions')
                                             <form method="POST" action="{{ route('permissions.destroy', $permission) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-sm btn-ghost" data-tip="Delete Permission" onclick="return confirm('Are you sure?')">
+                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-sm btn-ghost" data-tip="Delete" onclick="return confirm('Are you sure?')">
                                                     <x-heroicon-o-trash class="h-4 w-4"/>
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -75,12 +79,14 @@
                     </table>
                 </div>
 
+                @can('delete-permissions')
                 <form method="POST" action="{{ route('permissions.bulk-delete') }}" id="bulkDeleteForm">
                     @csrf
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
                         <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
                     </div>
                 </form>
+                @endcan
 
                 <!-- Bulk Delete Confirmation Modal -->
                 <div id="bulkDeleteModal" class="modal">

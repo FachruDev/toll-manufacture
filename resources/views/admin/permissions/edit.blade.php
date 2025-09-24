@@ -25,7 +25,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                                <input type="text" name="name" value="{{ old('name', $permission->name) }}" class="w-full input input-primary focus:border-none" required>
+                                <input type="text" name="name" value="{{ old('name', $permission->name) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-permissions') readonly @endcannot>
                                 @error('name')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -33,9 +33,11 @@
                         </div>
                     </div>
 
+                    @can('edit-permissions')
                     <div class="flex justify-end">
                         <button type="submit" class="btn btn-outline btn-primary">Update Permission</button>
                     </div>
+                    @endcan
                 </form>
             </div>
         </div>
