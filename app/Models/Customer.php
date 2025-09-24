@@ -10,16 +10,12 @@ class Customer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'company', 'phone', 'address', 'meta'
+        'name', 'email', 'company', 'phone', 'address', 'meta'
     ];
 
     protected $casts = [
         'meta' => 'array',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // No relation to User; account will be created later upon TMR approval
 }
-

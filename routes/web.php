@@ -5,7 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\MailSettingController;
 use App\Http\Controllers\Admin\UserManagement\UserController as AdminUserController;
-use App\Http\Controllers\Admin\UserManagement\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController;
 use App\Http\Controllers\Admin\UserManagement\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as AdminPermissionCategoryController;
@@ -75,8 +76,11 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('users/bulk-delete', [AdminUserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::post('users/{user}/send-verification', [AdminUserController::class, 'sendVerification'])->name('users.send-verification');
 
-    // Customer Management
-    Route::resource('customers', AdminCustomerController::class)->parameters(['customers' => 'customer'])->except(['show']);
+    // Customer Management (separate table)
+    Route::resource('customers', AdminCustomerController::class)->except(['show']);
+
+    // Departments
+    Route::resource('departments', AdminDepartmentController::class)->except(['show']);
 
     // Roles & Permissions
     Route::resource('roles', AdminRoleController::class)->except(['show']);

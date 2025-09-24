@@ -12,7 +12,7 @@ class EmailConfigSeeder extends Seeder
         DB::table('email_configs')->updateOrInsert(
             ['event_key' => 'tmr.submitted'],
             [
-                'send_to_roles' => json_encode(['superadmin','admin','dephead','supervisor','customer']),
+                'send_to_roles' => json_encode(['superadmin','admin','dephead','supervisor']),
                 'send_to_users' => json_encode([]),
                 'send_to_emails'=> json_encode([]),
                 'active' => true,
