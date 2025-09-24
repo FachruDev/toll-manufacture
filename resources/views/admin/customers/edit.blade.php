@@ -22,7 +22,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                            <input type="text" name="name" value="{{ old('name', $customer->name) }}" class="w-full input input-primary focus:border-none" required>
+                            <input type="text" name="name" value="{{ old('name', $customer->name) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-customers') readonly @endcannot>
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -30,7 +30,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                            <input type="email" name="email" value="{{ old('email', $customer->email) }}" class="w-full input input-primary focus:border-none" required>
+                            <input type="email" name="email" value="{{ old('email', $customer->email) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-customers') readonly @endcannot>
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -38,7 +38,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                            <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" class="w-full input input-primary focus:border-none">
+                            <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" class="w-full input input-primary focus:border-none" @cannot('edit-customers') readonly @endcannot>
                             @error('phone')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -46,7 +46,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Company</label>
-                            <input type="text" name="company" value="{{ old('company', $customer->company) }}" class="w-full input input-primary focus:border-none">
+                            <input type="text" name="company" value="{{ old('company', $customer->company) }}" class="w-full input input-primary focus:border-none" @cannot('edit-customers') readonly @endcannot>
                             @error('company')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -55,15 +55,17 @@
 
                     <div class="mt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                        <textarea name="address" class="w-full textarea textarea-primary focus:border-none" rows="3">{{ old('address', $customer->address) }}</textarea>
+                        <textarea name="address" class="w-full textarea textarea-primary focus:border-none" rows="3" @cannot('edit-customers') readonly @endcannot>{{ old('address', $customer->address) }}</textarea>
                         @error('address')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="flex justify-end mt-6">
-                        <button type="submit" class="btn btn-outline btn-primary">Update Customer</button>
-                    </div>
+                    @can('edit-customers')
+                        <div class="flex justify-end mt-6">
+                            <button type="submit" class="btn btn-outline btn-primary">Update Customer</button>
+                        </div>
+                    @endcan
                 </form>
             </div>
         </div>
