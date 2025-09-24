@@ -82,6 +82,7 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
 
     // Departments
     Route::resource('departments', AdminDepartmentController::class)->except(['show']);
+    Route::post('departments/bulk-delete', [AdminDepartmentController::class, 'bulkDelete'])->name('departments.bulk-delete');
 
     // Roles & Permissions
     Route::resource('roles', AdminRoleController::class)->except(['show']);

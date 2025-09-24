@@ -9,9 +9,12 @@ use Illuminate\Validation\Rule;
 
 class DepartmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $departments = Department::orderBy('name')->paginate(20);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $departments = Department::orderBy('name')->paginate($perPage);
         return response()->view('admin.departments.index', compact('departments'));
     }
 
@@ -51,6 +54,13 @@ class DepartmentController extends Controller
     {
         $department->delete();
         return back()->with('success','Department deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('department_ids', []);
+        Department::whereIn('id', $ids)->delete();
+        return redirect()->route('departments.index')->with('success', 'Selected departments deleted successfully.');
     }
 }
 
