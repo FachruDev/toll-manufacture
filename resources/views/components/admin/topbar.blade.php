@@ -1,9 +1,9 @@
 <!-- Topbar -->
-<header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center px-4">
+<header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center px-4 sticky top-0 z-10">
     <!-- Left Side -->
     <div class="flex items-center space-x-4">
         <!-- Sidebar Toggle -->
-        <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+        <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
             <x-heroicon-o-chevron-right class="w-6 h-6"/>
         </button>
     </div>
