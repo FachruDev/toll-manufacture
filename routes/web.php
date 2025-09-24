@@ -83,6 +83,7 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('roles/bulk-delete', [AdminRoleController::class, 'bulkDelete'])->name('roles.bulk-delete');
     Route::resource('permissions', AdminPermissionController::class)->except(['show']);
     Route::post('permissions/bulk-delete', [AdminPermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
+    Route::post('permissions/bulk-assign', [AdminPermissionController::class, 'bulkAssignToCategory'])->name('permissions.bulk-assign');
     Route::resource('permission-categories', AdminPermissionCategoryController::class)->parameters(['permission-categories' => 'permission_category'])->except(['show']);
 });
 

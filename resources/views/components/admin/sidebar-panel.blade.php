@@ -84,6 +84,12 @@
                 <span class="sidebar-text">Permissions</span>
             </a>
             @endcan
+            @can('manage.users')
+            <a href="{{ route('permission-categories.index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('permission-categories.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                <x-heroicon-o-folder class="mx-2"/>
+                <span class="sidebar-text">Permission Categories</span>
+            </a>
+            @endcan
         </div>
     </nav>
 </div>

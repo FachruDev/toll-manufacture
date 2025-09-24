@@ -16,13 +16,13 @@ class PermissionCategoryController extends Controller
             ->orderBy('sort_order')
             ->orderBy('name')
             ->paginate(20);
-        return response()->view('admin.permission-categories.index', compact('categories'));
+        return view('admin.permission-categories.index', compact('categories'));
     }
 
     public function create()
     {
         $permissions = Permission::orderBy('name')->get(['id','name']);
-        return response()->view('admin.permission-categories.create', compact('permissions'));
+        return view('admin.permission-categories.create', compact('permissions'));
     }
 
     public function store(Request $request)
@@ -45,14 +45,14 @@ class PermissionCategoryController extends Controller
             $category->permissions()->sync($data['permissions']);
         }
 
-        return redirect()->route('admin.permission-categories.index')->with('success','Category created');
+        return redirect()->route('permission-categories.index')->with('success','Category created');
     }
 
     public function edit(PermissionCategory $permission_category)
     {
         $permissions = Permission::orderBy('name')->get(['id','name']);
         $permission_category->load('permissions');
-        return response()->view('admin.permission-categories.edit', [
+        return view('admin.permission-categories.edit', [
             'category' => $permission_category,
             'permissions' => $permissions,
         ]);
@@ -78,7 +78,7 @@ class PermissionCategoryController extends Controller
             $permission_category->permissions()->sync($data['permissions'] ?? []);
         }
 
-        return redirect()->route('admin.permission-categories.index')->with('success','Category updated');
+        return redirect()->route('permission-categories.index')->with('success','Category updated');
     }
 
     public function destroy(PermissionCategory $permission_category)
