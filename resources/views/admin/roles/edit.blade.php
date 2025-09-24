@@ -35,7 +35,7 @@
                     <div class="mb-8">
                         <h2 class="text-xl font-semibold mb-6">Permissions</h2>
                         <div class="mb-4">
-                            <input type="text" id="permission-search" class="input input-primary w-full" placeholder="Search permissions..." autocomplete="off" list="permissions-datalist">
+                            <input type="text" id="permission-search" class="input input-primary w-full focus:border-none" placeholder="Search permissions..." autocomplete="off" list="permissions-datalist">
                             <datalist id="permissions-datalist">
                                 @foreach($permissions as $permission)
                                     <option value="{{ $permission->name }}">

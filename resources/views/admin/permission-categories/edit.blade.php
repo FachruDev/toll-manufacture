@@ -57,9 +57,17 @@
                         <!-- Permissions -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Permissions</label>
+                            <div class="mb-4">
+                                <input type="text" id="permission-search" class="input input-primary w-full focus:border-none" placeholder="Search permissions..." autocomplete="off" list="permissions-datalist">
+                                <datalist id="permissions-datalist">
+                                    @foreach($permissions as $permission)
+                                        <option value="{{ $permission->name }}">
+                                    @endforeach
+                                </datalist>
+                            </div>
                             <div class="border border-gray-300 rounded-lg p-4 max-h-64 overflow-y-auto">
                                 @forelse($permissions as $permission)
-                                    <label class="flex items-center space-x-2 py-1">
+                                    <label class="flex items-center space-x-2 py-1 permission-item" data-name="{{ strtolower($permission->name) }}">
                                         <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                                class="checkbox checkbox-sm checkbox-primary"
                                                {{ in_array($permission->id, old('permissions', $category->permissions->pluck('id')->toArray())) ? 'checked' : '' }}>
@@ -84,3 +92,18 @@
         </div>
     </div>
 </x-layouts.dashboard>
+
+<script>
+document.getElementById('permission-search').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const items = document.querySelectorAll('.permission-item');
+    items.forEach(item => {
+        const name = item.getAttribute('data-name');
+        if (name.includes(searchTerm)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+</script>
