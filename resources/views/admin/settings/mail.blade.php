@@ -22,11 +22,11 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Host</label>
-                            <input class="w-full input input-primary focus:border-none" name="host" value="{{ old('host', $setting->host) }}" required />
+                            <input class="w-full input input-primary focus:border-none" name="host" value="{{ old('host', $setting->host) }}" required @cannot('edit-mail') readonly @endcannot/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Port</label>
-                            <input class="w-full input input-primary focus:border-none" name="port" type="number" value="{{ old('port', $setting->port) }}" required />
+                            <input class="w-full input input-primary focus:border-none" name="port" type="number" value="{{ old('port', $setting->port) }}" required @cannot('edit-mail') readonly @endcannot/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Encryption</label>
@@ -38,7 +38,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Username (email)</label>
-                            <input class="w-full input input-primary focus:border-none" name="username" value="{{ old('username', $setting->username) }}" />
+                            <input class="w-full input input-primary focus:border-none" name="username" value="{{ old('username', $setting->username) }}" @cannot('edit-mail') readonly @endcannot/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Password/App Password</label>
@@ -46,29 +46,31 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">From Address</label>
-                            <input class="w-full input input-primary focus:border-none" name="from_address" value="{{ old('from_address', $setting->from_address) }}" required />
+                            <input class="w-full input input-primary focus:border-none" name="from_address" value="{{ old('from_address', $setting->from_address) }}" required @cannot('edit-mail') readonly @endcannot/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">From Name</label>
-                            <input class="w-full input input-primary focus:border-none" name="from_name" value="{{ old('from_name', $setting->from_name) }}" required />
+                            <input class="w-full input input-primary focus:border-none" name="from_name" value="{{ old('from_name', $setting->from_name) }}" required @cannot('edit-mail') readonly @endcannot/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Timeout (seconds)</label>
-                            <input class="w-full input input-primary focus:border-none" name="timeout" type="number" value="{{ old('timeout', $setting->timeout) }}" />
+                            <input class="w-full input input-primary focus:border-none" name="timeout" type="number" value="{{ old('timeout', $setting->timeout) }}" @cannot('edit-mail') readonly @endcannot/>
                         </div>
                     </div>
 
                     <div class="mt-6">
                         <label class="flex items-center cursor-pointer">
                             <input type="hidden" name="active" value="0">
-                            <input type="checkbox" name="active" value="1" class="toggle toggle-primary mr-3" {{ old('active', $setting->active ?? true) ? 'checked' : '' }} />
+                            <input type="checkbox" name="active" value="1" class="toggle toggle-primary mr-3" {{ old('active', $setting->active ?? true) ? 'checked' : '' }} @cannot('edit-mail') readonly @endcannot/>
                             <span class="text-sm font-medium text-gray-700">Aktifkan konfigurasi ini</span>
                         </label>
                     </div>
 
+                    @can('edit-mail')
                     <div class="flex justify-end mt-6">
                         <button type="submit" class="btn btn-outline btn-primary">Simpan</button>
                     </div>
+                    @endcan
 
                     <div class="alert mt-6">
                         <span>
