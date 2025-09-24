@@ -8,7 +8,7 @@
         </div>
 
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-semibold text-primary">Permission Categories</h1>
+            <h1 class="text-2xl font-semibold">Permission Categories</h1>
             <div class="flex items-center gap-4">
                 <form method="GET" action="{{ route('permission-categories.index') }}" class="flex items-center gap-2">
                     <label for="per_page" class="text-sm font-medium">Show:</label>
@@ -20,7 +20,9 @@
                     </select>
                     <span class="text-sm text-gray-500">entries</span>
                 </form>
-                <a href="{{ route('permission-categories.create') }}" class="btn btn-outline btn-primary">Add Category</a>
+                @can('create-permission-categories')
+                    <a href="{{ route('permission-categories.create') }}" class="btn btn-outline btn-primary">Add Category</a>
+                @endcan
             </div>
         </div>
 
@@ -47,23 +49,25 @@
                                         <input type="checkbox" name="category_ids[]" value="{{ $category->id }}" class="checkbox checkbox-sm category-checkbox" form="bulkDeleteForm">
                                     </td>
                                     <td class="font-medium">{{ $category->name }}</td>
-                                    <td>{{ $category->description ?? '-' }}</td>
+                                    <td>{{ Str::limit($category->description ?? '-', 30) }}</td>
                                     <td>
                                         <span class="badge badge-primary">{{ $category->permissions_count }}</span>
                                     </td>
                                     <td>{{ $category->sort_order ?? 0 }}</td>
                                     <td>
                                         <div class="flex gap-2">
-                                            <a href="{{ route('permission-categories.edit', $category) }}" class="btn btn-sm btn-ghost">
+                                            <a href="{{ route('permission-categories.edit', $category) }}" class="btn btn-sm btn-ghost tooltip tooltip-top" data-tip="Edit & Detail">
                                                 <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
+                                            @can('delete-permission-categories')
                                             <form method="POST" action="{{ route('permission-categories.destroy', $category) }}" class="inline" onsubmit="return confirm('Are you sure?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-ghost text-error">
+                                                <button type="submit" class="btn btn-sm btn-ghost text-error tooltip tooltip-top" data-tip="Delete">
                                                     <x-heroicon-o-trash class="h-4 w-4"/>
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -83,12 +87,14 @@
                     </table>
                 </div>
 
+                @can('delete-permission-categories')
                 <form method="POST" action="{{ route('permission-categories.bulk-delete') }}" id="bulkDeleteForm">
                     @csrf
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
                         <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
                     </div>
                 </form>
+                @endcan
 
                 <!-- Bulk Delete Confirmation Modal -->
                 <div id="bulkDeleteModal" class="modal">

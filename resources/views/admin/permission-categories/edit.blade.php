@@ -27,7 +27,7 @@
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
                             <input type="text" name="name" id="name" value="{{ old('name', $category->name) }}"
                                    class="input focus:border-none input-primary w-full @error('name') input-error @enderror"
-                                   required>
+                                   required @cannot('edit-permission-categories') readonly @endcannot>
                             @error('name')
                                 <p class="text-error text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -37,7 +37,7 @@
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                             <textarea name="description" id="description" rows="3"
-                                      class="textarea focus:border-none textarea-primary w-full @error('description') textarea-error @enderror">{{ old('description', $category->description) }}</textarea>
+                                      class="textarea focus:border-none textarea-primary w-full @error('description') textarea-error @enderror" @cannot('edit-permission-categories') readonly @endcannot>{{ old('description', $category->description) }}</textarea>
                             @error('description')
                                 <p class="text-error text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -48,7 +48,7 @@
                             <label for="sort_order" class="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
                             <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', $category->sort_order ?? 0) }}"
                                    class="input focus:border-none input-primary w-full @error('sort_order') input-error @enderror"
-                                   min="0">
+                                   min="0" @cannot('edit-permission-categories') readonly @endcannot>
                             @error('sort_order')
                                 <p class="text-error text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -82,11 +82,12 @@
                             @enderror
                         </div>
                     </div>
-
+                    @can('edit-permission-categories')
                     <div class="flex gap-4 mt-6">
                         <button type="submit" class="btn btn-primary btn-outline">Update Category</button>
                         <a href="{{ route('permission-categories.index') }}" class="btn btn-outline btn-neutral">Cancel</a>
                     </div>
+                    @endcan
                 </form>
             </div>
         </div>
