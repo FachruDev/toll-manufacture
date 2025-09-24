@@ -20,7 +20,9 @@
                     </select>
                     <span class="text-sm text-gray-500">entries</span>
                 </form>
+                @can('create-roles')
                 <a href="{{ route('roles.create') }}" class="btn btn-outline btn-primary">Add New Role</a>
+                @endcan
             </div>
         </div>
 
@@ -50,16 +52,18 @@
                                     </td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('roles.edit', $role) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit Role">
+                                            <a href="{{ route('roles.edit', $role) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit & Detail">
                                                 <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
+                                            @can('delete-roles')
                                             <form method="POST" action="{{ route('roles.destroy', $role) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-ghost btn-sm" data-tip="Delete Roles" onclick="return confirm('Are you sure?')">
+                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-ghost btn-sm" data-tip="Delete" onclick="return confirm('Are you sure?')">
                                                     <x-heroicon-o-trash class="h-4 w-4"/>
                                                 </button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -79,12 +83,14 @@
                     </table>
                 </div>
 
+                @can('delete-roles')
                 <form method="POST" action="{{ route('roles.bulk-delete') }}" id="bulkDeleteForm">
                     @csrf
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
                         <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
                     </div>
                 </form>
+                @endcan
 
                 <!-- Bulk Delete Confirmation Modal -->
                 <div id="bulkDeleteModal" class="modal">

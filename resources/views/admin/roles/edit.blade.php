@@ -24,7 +24,7 @@
                         <h2 class="text-xl font-semibold mb-6">Role Information</h2>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                            <input type="text" name="name" value="{{ old('name', $role->name) }}" class="w-full input input-primary focus:border-none" required>
+                            <input type="text" name="name" value="{{ old('name', $role->name) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-roles') readonly @endcannot>
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -55,9 +55,11 @@
                         @enderror
                     </div>
 
+                    @can('edit-roles')
                     <div class="flex justify-end">
                         <button type="submit" class="btn btn-outline btn-primary">Update Role</button>
                     </div>
+                    @endcan
                 </form>
             </div>
         </div>
