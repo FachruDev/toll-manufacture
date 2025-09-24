@@ -64,14 +64,14 @@
                                     <td class="font-medium">{{ $permission->name }}</td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top btn btn-sm btn-ghost" data-tip="Edit Permission">
-                                                <x-heroicon-o-pencil-square class="h-4 w-4"/>
+                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top text-warning hover:text-yellow-600 transition duration-200" data-tip="Edit Permission">
+                                                <x-heroicon-o-pencil-square class="w-6 h-6" />
                                             </a>
                                             <form method="POST" action="{{ route('permissions.destroy', $permission) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-sm btn-ghost" data-tip="Delete Permission" onclick="return confirm('Are you sure?')">
-                                                    <x-heroicon-o-trash class="h-4 w-4"/>
+                                                <button type="submit" class="tooltip tooltip-top text-error cursor-pointer hover:text-red-600 transition duration-200" data-tip="Delete Permission" onclick="return confirm('Are you sure?')">
+                                                    <x-heroicon-s-x-circle class="w-6 h-6"/>
                                                 </button>
                                             </form>
                                         </div>
@@ -96,10 +96,7 @@
                 <form method="POST" action="{{ route('permissions.bulk-delete') }}" id="bulkDeleteForm">
                     @csrf
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
-                        <div class="flex gap-2">
-                            <button type="button" class="btn btn-warning btn-outline btn-sm w-max" onclick="openBulkAssignModal()" id="bulkAssignBtn" disabled>Bulk Assign to Category</button>
-                            <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
-                        </div>
+                        <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
                     </div>
                 </form>
 
@@ -114,55 +111,24 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Bulk Assign Modal -->
-                <div id="bulkAssignModal" class="modal">
-                    <div class="modal-box">
-                        <h3 class="font-bold text-lg">Bulk Assign to Category</h3>
-                        <form method="POST" action="{{ route('permissions.bulk-assign') }}" id="bulkAssignForm">
-                            @csrf
-                            <div class="py-4 space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Existing Category</label>
-                                    <select name="category_id" class="select select-primary w-full" id="categorySelect">
-                                        <option value="">Choose a category</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="divider">OR</div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Create New Category</label>
-                                    <input type="text" name="new_category_name" class="input input-primary w-full" placeholder="Enter new category name" id="newCategoryInput">
-                                </div>
-                            </div>
-                            <div class="modal-action">
-                                <button type="button" class="btn" onclick="closeBulkAssignModal()">Cancel</button>
-                                <button type="submit" class="btn btn-warning">Assign</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
                 <script>
                     // Select all checkboxes
                     function toggleAll(source) {
                         const checkboxes = document.querySelectorAll('.permission-checkbox');
                         checkboxes.forEach(cb => cb.checked = source.checked);
-                        updateBulkButtons();
+                        updateBulkDeleteButton();
                     }
 
-                    // Enable/disable bulk buttons
-                    function updateBulkButtons() {
+                    // Enable/disable bulk delete button
+                    function updateBulkDeleteButton() {
                         const anyChecked = Array.from(document.querySelectorAll('.permission-checkbox')).some(c => c.checked);
-                        document.getElementById('bulkAssignBtn').disabled = !anyChecked;
                         document.getElementById('bulkDeleteBtn').disabled = !anyChecked;
                     }
 
                     // Attach event listeners to checkboxes only
                     document.addEventListener('DOMContentLoaded', function() {
                         document.querySelectorAll('.permission-checkbox').forEach(cb => {
-                            cb.addEventListener('change', updateBulkButtons);
+                            cb.addEventListener('change', updateBulkDeleteButton);
                         });
                     });
 
@@ -177,35 +143,6 @@
 
                     function confirmBulkDelete() {
                         document.getElementById('bulkDeleteForm').submit();
-                    }
-
-                    function openBulkAssignModal() {
-                        // Sync selected permission IDs to bulk assign form
-                        const selectedCheckboxes = document.querySelectorAll('.permission-checkbox:checked');
-                        const bulkAssignForm = document.getElementById('bulkAssignForm');
-
-                        // Remove existing hidden inputs
-                        const existingInputs = bulkAssignForm.querySelectorAll('input[name="permission_ids[]"]');
-                        existingInputs.forEach(input => input.remove());
-
-                        // Add hidden inputs for selected permissions
-                        selectedCheckboxes.forEach(checkbox => {
-                            const hiddenInput = document.createElement('input');
-                            hiddenInput.type = 'hidden';
-                            hiddenInput.name = 'permission_ids[]';
-                            hiddenInput.value = checkbox.value;
-                            bulkAssignForm.appendChild(hiddenInput);
-                        });
-
-                        // Open modal
-                        document.getElementById('bulkAssignModal').classList.add('modal-open');
-                        // Reset form
-                        document.getElementById('categorySelect').value = '';
-                        document.getElementById('newCategoryInput').value = '';
-                    }
-
-                    function closeBulkAssignModal() {
-                        document.getElementById('bulkAssignModal').classList.remove('modal-open');
                     }
                 </script>
             </div>

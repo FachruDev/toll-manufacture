@@ -12,10 +12,11 @@ class PermissionCategoryController extends Controller
 {
     public function index()
     {
+        $perPage = request('per_page', 10);
         $categories = PermissionCategory::withCount('permissions')
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->paginate(20);
+            ->paginate($perPage);
         return view('admin.permission-categories.index', compact('categories'));
     }
 
@@ -85,6 +86,18 @@ class PermissionCategoryController extends Controller
     {
         $permission_category->delete();
         return back()->with('success','Category deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:permission_categories,id',
+        ]);
+
+        PermissionCategory::whereIn('id', $request->category_ids)->delete();
+
+        return redirect()->route('permission-categories.index')->with('success', 'Selected categories deleted successfully.');
     }
 }
 
