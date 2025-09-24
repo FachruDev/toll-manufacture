@@ -88,37 +88,37 @@
                 </div>
                 <div class="collapse-content" x-show="userManagementOpen" x-transition>
                     <div class="space-y-1 pl-2">
-                        @can('manage.users')
+                        @can('view-users')
                         <a href="{{ route('users.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('users.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Users</span>
                         </a>
                         @endcan
-                        @can('manage.users')
+                        @can('view.roles')
                         <a href="{{ route('roles.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('roles.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Roles</span>
                         </a>
                         @endcan
-                        @can('manage.users')
+                        @can('view-permissions')
                         <a href="{{ route('permissions.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('permissions.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Permissions</span>
                         </a>
                         @endcan
-                        @can('manage.users')
+                        @can('view-permission-categories')
                         <a href="{{ route('permission-categories.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('permission-categories.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Permission Categories</span>
                         </a>
                         @endcan
-                        @can('manage.users')
+                        @can('view-departments')
                         <a href="{{ route('departments.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('customers.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Departments</span>
                         </a>
                         @endcan
-                        @can('manage.users')
+                        @can('view-customers')
                         <a href="{{ route('customers.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('customers.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Customers</span>
