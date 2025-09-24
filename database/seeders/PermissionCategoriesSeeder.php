@@ -16,7 +16,23 @@ class PermissionCategoriesSeeder extends Seeder
                 'description' => 'Semua permission untuk manajemen user',
                 'sort' => 10,
                 'perms' => [
-                    'manage-users','create-users','edit-users','delete-users','send-verifications-users',
+                    'view-users','create-users','edit-users','delete-users','send-verifications-users',
+                ],
+            ],
+            'management-departments' => [
+                'label' => 'Permission Crud Department',
+                'description' => 'Semua permission untuk manajemen department',
+                'sort' => 15,
+                'perms' => [
+                    'view-departments','create-departments','edit-departments','delete-departments',
+                ],
+            ],
+            'management-permission-categories' => [
+                'label' => 'Permission Permission Category',
+                'description' => 'Semua permission untuk manajemen permission category',
+                'sort' => 18,
+                'perms' => [
+                    'view-permission-categories','create-permission-categories','edit-permission-categories','delete-permission-categories',
                 ],
             ],
             'management-permissions' => [

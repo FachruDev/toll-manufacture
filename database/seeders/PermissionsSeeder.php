@@ -11,7 +11,11 @@ class PermissionsSeeder extends Seeder
     {
         $permissions = [
             // Users
-            'manage-users', 'create-users', 'edit-users', 'delete-users', 'send-verifications-users',
+            'view-users', 'create-users', 'edit-users', 'delete-users', 'send-verifications-users',
+            // Departments
+            'view-departments', 'create-departments', 'edit-departments', 'delete-departments',
+            // Permission Categories
+            'view-permission-categories', 'create-permission-categories', 'edit-permission-categories', 'delete-permission-categories',
             // Permissions
             'view-permissions', 'create-permissions', 'edit-permissions', 'delete-permissions',
             // Customers

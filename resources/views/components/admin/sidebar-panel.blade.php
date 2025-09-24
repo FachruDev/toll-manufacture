@@ -94,7 +94,7 @@
                             <span class="sidebar-text">Users</span>
                         </a>
                         @endcan
-                        @can('view.roles')
+                        @can('view-roles')
                         <a href="{{ route('roles.index') }}" class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('roles.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1"/>
                             <span class="sidebar-text">Roles</span>
