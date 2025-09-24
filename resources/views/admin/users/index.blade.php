@@ -20,7 +20,9 @@
                     </select>
                     <span class="text-sm text-gray-500">entries</span>
                 </form>
+                @can('create-users')
                 <a href="{{ route('users.create') }}" class="btn btn-outline btn-primary">Add New User</a>
+                @endcan
             </div>
         </div>
 
@@ -58,17 +60,19 @@
                                     </td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('users.edit', $user) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit User">
+                                            <a href="{{ route('users.edit', $user) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit & Detail">
                                                 <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
 
                                             @if(!$user->hasVerifiedEmail())
+                                                @can('send-verifications-users')
                                                 <form method="POST" action="{{ route('users.send-verification', $user) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" class="tooltip tooltip-top text-primary btn btn-sm btn-ghost" data-tip="Send Verification Email">
                                                         <x-heroicon-s-paper-airplane class="w-4 h-4"/>
                                                     </button>
                                                 </form>
+                                                @endcan
                                             @endif
                                         </div>
                                     </td>
@@ -89,12 +93,14 @@
                     </table>
                 </div>
 
+                @can('delete-users')
                 <form method="POST" action="{{ route('users.bulk-delete') }}" id="bulkDeleteForm">
                     @csrf
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-2">
                         <button type="button" class="btn btn-error btn-outline btn-sm w-max" onclick="openBulkDeleteModal()" id="bulkDeleteBtn" disabled>Bulk Delete</button>
                     </div>
                 </form>
+                @endcan
 
                 <!-- Bulk Delete Confirmation Modal -->
                 <div id="bulkDeleteModal" class="modal">

@@ -25,7 +25,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Profile Image</label>
-                            <input type="file" name="image" class="w-full mb-5 file-input file-input-primary" accept="image/*">
+                            <input type="file" name="image" class="w-full mb-5 file-input file-input-primary" accept="image/*" @cannot('edit-users') readonly @endcannot>
                             @if($user->image_path)
                                 <p class="text-sm mt-1">Current: <a href="{{ asset('storage/' . $user->image_path) }}" target="_blank">View Image</a></p>
                             @endif
@@ -37,7 +37,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full input input-primary focus:border-none" required>
+                            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-users') readonly @endcannot>
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -45,7 +45,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full input input-primary focus:border-none" required>
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full input input-primary focus:border-none" required @cannot('edit-users') readonly @endcannot>
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -53,7 +53,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Employee ID</label>
-                            <input type="text" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" class="w-full input input-primary focus:border-none">
+                            <input type="text" name="employee_id" value="{{ old('employee_id', $user->employee_id) }}" class="w-full input input-primary focus:border-none" @cannot('edit-users') readonly @endcannot>
                             @error('employee_id')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -61,7 +61,7 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full input input-primary focus:border-none">
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full input input-primary focus:border-none" @cannot('edit-users') readonly @endcannot>
                             @error('phone')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -72,7 +72,7 @@
                             <select name="department_id" class="w-full select select-primary">
                                 <option value="">Select Department</option>
                                 @foreach($departments as $department)
-                                    <option value="{{ $department->id }}" {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }}>{{ $department->name }}</option>
+                                    <option value="{{ $department->id }}" {{ old('department_id', $user->department_id) == $department->id ? 'selected' : '' }} @cannot('edit-users') readonly @endcannot>{{ $department->name }}</option>
                                 @endforeach
                             </select>
                             @error('department_id')
@@ -93,7 +93,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Password (leave blank to keep current)</label>
-                                <input type="password" name="password" class="w-full input input-primary focus:border-none">
+                                <input type="password" name="password" class="w-full input input-primary focus:border-none" @cannot('edit-users') readonly @endcannot>
                                 @error('password')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -101,7 +101,7 @@
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-                                <input type="password" name="password_confirmation" class="w-full input input-primary focus:border-none">
+                                <input type="password" name="password_confirmation" class="w-full input input-primary focus:border-none" @cannot('edit-users') readonly @endcannot>
                             </div>
 
                         <div>
@@ -120,14 +120,17 @@
                         </div>
                     </div>
 
+                    @can('edit-users')
                     <div class="flex justify-end">
                         <button type="submit" class="btn btn-outline btn-primary">Update User</button>
                     </div>
+                    @endcan
                 </form>
             </div>
         </div>
 
         @if(!$user->hasVerifiedEmail())
+        @can('send-verifications-users')
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm mt-6">
             <div class="p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-2">Email Verification</h3>
@@ -138,6 +141,7 @@
                 </form>
             </div>
         </div>
+        @endcan
         @endif
     </div>
 </x-layouts.dashboard>
