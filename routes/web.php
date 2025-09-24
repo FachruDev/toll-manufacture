@@ -76,8 +76,9 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('users/bulk-delete', [AdminUserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::post('users/{user}/send-verification', [AdminUserController::class, 'sendVerification'])->name('users.send-verification');
 
-    // Customer Management (separate table)
+    // Customer Management
     Route::resource('customers', AdminCustomerController::class)->except(['show']);
+    Route::post('customers/bulk-delete', [AdminCustomerController::class, 'bulkDelete'])->name('customers.bulk-delete');
 
     // Departments
     Route::resource('departments', AdminDepartmentController::class)->except(['show']);

@@ -9,9 +9,12 @@ use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::query()->latest('id')->paginate(20);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $customers = Customer::query()->latest('id')->paginate($perPage);
         return response()->view('admin.customers.index', compact('customers'));
     }
 
@@ -32,7 +35,7 @@ class CustomerController extends Controller
 
         Customer::create($data);
 
-        return redirect()->route('admin.customers.index')->with('success','Customer created');
+        return redirect()->route('customers.index')->with('success','Customer created');
     }
 
     public function edit(Customer $customer)
@@ -52,13 +55,20 @@ class CustomerController extends Controller
 
         $customer->update($data);
 
-        return redirect()->route('admin.customers.index')->with('success','Customer updated');
+        return redirect()->route('customers.index')->with('success','Customer updated');
     }
 
     public function destroy(Customer $customer)
     {
         $customer->delete();
         return back()->with('success','Customer deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('customer_ids', []);
+        Customer::whereIn('id', $ids)->delete();
+        return redirect()->route('customers.index')->with('success', 'Selected customers deleted successfully.');
     }
 }
 
