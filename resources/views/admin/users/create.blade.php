@@ -1,22 +1,4 @@
 <x-layouts.dashboard>
-    @if(session('success'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-success">
-            <x-heroicon-o-check-badge class="h-6 w-6"/>
-            <span>{{ session('success') }}</span>
-        </div>
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-error">
-            <x-heroicon-s-exclamation-triangle class="h-6 w-6"/>
-            <span>{{ session('error') }}</span>
-        </div>
-    </div>
-    @endif
-
     <div class="max-w mx-auto p-4">
         <div class="breadcrumbs text-sm mb-3">
             <ul>
