@@ -34,11 +34,15 @@
                                     <td>{{ $customer->company ?? '-' }}</td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{{ route('customers.edit', $customer) }}" class="tooltip tooltip-top btn btn-sm btn-ghost" data-tip="Edit Customer">
+                                                <x-heroicon-o-pencil-square class="h-4 w-4"/>
+                                            </a>
                                             <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-error" onclick="return confirm('Are you sure?')">Delete</button>
+                                                <button type="submit" class="tooltip tooltip-top btn btn-sm btn-ghost text-error" data-tip="Delete Customer" onclick="return confirm('Are you sure?')">
+                                                    <x-heroicon-o-trash class="h-4 w-4"/>
+                                                </button>
                                             </form>
                                         </div>
                                     </td>
