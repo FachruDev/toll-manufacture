@@ -1,22 +1,4 @@
 <x-layouts.dashboard>
-    @if(session('success'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-success">
-            <x-heroicon-o-check-badge class="h-6 w-6"/>
-            <span>{{ session('success') }}</span>
-        </div>
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-error">
-            <x-heroicon-s-exclamation-triangle class="h-6 w-6"/>
-            <span>{{ session('error') }}</span>
-        </div>
-    </div>
-    @endif
-
     <div class="max-w mx-auto p-4">
         <div class="breadcrumbs text-sm mb-3">
             <ul>
@@ -64,14 +46,14 @@
                                     <td class="font-medium">{{ $permission->name }}</td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top text-warning hover:text-yellow-600 transition duration-200" data-tip="Edit Permission">
-                                                <x-heroicon-o-pencil-square class="w-6 h-6" />
+                                            <a href="{{ route('permissions.edit', $permission) }}" class="tooltip tooltip-top btn btn-sm btn-ghost" data-tip="Edit Permission">
+                                                <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
                                             <form method="POST" action="{{ route('permissions.destroy', $permission) }}" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="tooltip tooltip-top text-error cursor-pointer hover:text-red-600 transition duration-200" data-tip="Delete Permission" onclick="return confirm('Are you sure?')">
-                                                    <x-heroicon-s-x-circle class="w-6 h-6"/>
+                                                <button type="submit" class="tooltip tooltip-top text-error btn btn-sm btn-ghost" data-tip="Delete Permission" onclick="return confirm('Are you sure?')">
+                                                    <x-heroicon-o-trash class="h-4 w-4"/>
                                                 </button>
                                             </form>
                                         </div>

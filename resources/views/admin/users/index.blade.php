@@ -1,22 +1,4 @@
 <x-layouts.dashboard>
-    @if(session('success'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-success">
-            <x-heroicon-o-check-badge class="h-6 w-6"/>
-            <span>{{ session('success') }}</span>
-        </div>
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="toast toast-top toast-end z-50">
-        <div class="alert alert-error">
-            <x-heroicon-s-exclamation-triangle class="h-6 w-6"/>
-            <span>{{ session('error') }}</span>
-        </div>
-    </div>
-    @endif
-
     <div class="max-w mx-auto p-4">
         <div class="breadcrumbs text-sm mb-3">
             <ul>
@@ -76,15 +58,15 @@
                                     </td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            <a href="{{ route('users.edit', $user) }}" class="tooltip tooltip-top text-warning hover:text-yellow-600 transition duration-200" data-tip="Edit User">
-                                                <x-heroicon-o-pencil-square class="w-6 h-6" />
+                                            <a href="{{ route('users.edit', $user) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit User">
+                                                <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
 
                                             @if(!$user->hasVerifiedEmail())
                                                 <form method="POST" action="{{ route('users.send-verification', $user) }}" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="tooltip tooltip-top text-primary hover:text-blue-700 transition duration-200 cursor-pointer" data-tip="Send Verification Email">
-                                                        <x-heroicon-s-paper-airplane class="w-6 h-6"/>
+                                                    <button type="submit" class="tooltip tooltip-top text-primary btn btn-sm btn-ghost" data-tip="Send Verification Email">
+                                                        <x-heroicon-s-paper-airplane class="w-4 h-4"/>
                                                     </button>
                                                 </form>
                                             @endif

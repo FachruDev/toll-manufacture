@@ -1,14 +1,4 @@
 <x-layouts.dashboard>
-    @if (session('success'))
-        <div class="fixed top-4 right-4 z-50">
-            <div
-                class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md shadow-md flex items-center space-x-2">
-                <x-heroicon-o-check-badge class="h-6 w-6" />
-                <span>{{ session('success') }}</span>
-            </div>
-        </div>
-    @endif
-
     <div class="max-w mx-auto p-4">
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
             <div class="p-6">
