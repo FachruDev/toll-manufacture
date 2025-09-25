@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController
 use App\Http\Controllers\Admin\UserManagement\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as AdminPermissionCategoryController;
+use App\Http\Controllers\PublicTmrController;
+use App\Http\Controllers\Admin\TmrController as AdminTmrController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -34,6 +36,10 @@ Route::post('/customer/login', [AuthController::class, 'loginCustomer'])->name('
 Route::redirect('/login', '/customer/login')->name('login');
 
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Public TMR (guest via token)
+Route::get('/tmr/invite/{token}', [PublicTmrController::class, 'show'])->name('tmr.invite.show');
+Route::post('/tmr/invite/{token}', [PublicTmrController::class, 'submit'])->name('tmr.invite.submit');
 
 // Email Verification
 Route::get('/email/verify', function () {
@@ -91,6 +97,12 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('permissions/bulk-delete', [AdminPermissionController::class, 'bulkDelete'])->name('permissions.bulk-delete');
     Route::resource('permission-categories', AdminPermissionCategoryController::class)->parameters(['permission-categories' => 'permission_category'])->except(['show']);
     Route::post('permission-categories/bulk-delete', [AdminPermissionCategoryController::class, 'bulkDelete'])->name('permission-categories.bulk-delete');
+
+    // TMR Admin
+    Route::get('/tmrs', [AdminTmrController::class, 'index'])->name('admin.tmrs.index');
+    Route::get('/tmrs/{tmr}', [AdminTmrController::class, 'show'])->name('admin.tmrs.show');
+    Route::post('/tmrs/{tmr}/approve', [AdminTmrController::class, 'approve'])->name('admin.tmrs.approve');
+    Route::post('/tmrs/{tmr}/reject', [AdminTmrController::class, 'reject'])->name('admin.tmrs.reject');
 });
 
 // ===========================================================
