@@ -63,20 +63,33 @@ class PublicTmrDraftController extends Controller
         $draft = TmrDraft::firstOrCreate(['tmr_invite_id' => $invite->id]);
         $payload = $draft->payload ?? [];
 
-        // Required sections: contact, product_names[], formulation.actives_formulation
+        // Required sections: contact, product_names, formulation.actives_formulation
         if (empty($payload['contact']) || empty($payload['contact']['company'])) {
             return response()->json(['message' => 'Contact section incomplete', 'field' => 'contact.company'], 422);
         }
-        $names = collect($payload['product_names'] ?? [])->map(fn($v)=> trim((string)$v))->filter();
-        if ($names->isEmpty()) {
-            return response()->json(['message' => 'Product name is required', 'field' => 'product_names'], 422);
+        $productName = trim((string)($payload['product_name'] ?? ''));
+        if ($productName === '') {
+            return response()->json(['message' => 'Product name is required', 'field' => 'product_name'], 422);
         }
         $formActives = trim((string)($payload['formulation']['actives_formulation'] ?? ''));
         if ($formActives === '') {
             return response()->json(['message' => 'Actives/Formulation is required', 'field' => 'formulation.actives_formulation'], 422);
         }
 
-        $tmr = DB::transaction(function () use ($invite, $draft, $payload) {
+        $technicalMadeId = (int)($payload['technical_made_id'] ?? 0);
+        if ($technicalMadeId === 0) {
+            return response()->json(['message' => 'Technical made is required', 'field' => 'technical_made_id'], 422);
+        }
+        $indication = trim((string)($payload['indication'] ?? ''));
+        if ($indication === '') {
+            return response()->json(['message' => 'Indication is required', 'field' => 'indication'], 422);
+        }
+        $productCategory = trim((string)($payload['product_category'] ?? ''));
+        if ($productCategory === '') {
+            return response()->json(['message' => 'Product category is required', 'field' => 'product_category'], 422);
+        }
+
+        $tmr = DB::transaction(function () use ($invite, $draft, $payload, $productName, $formActives, $technicalMadeId, $indication, $productCategory) {
             $tmr = TmrEntry::create([
                 'public_uuid' => (string) Str::uuid(),
                 'number' => TmrNumberService::nextFormatted(),
@@ -97,18 +110,34 @@ class PublicTmrDraftController extends Controller
                 'email' => $contact['email'] ?? null,
             ]);
 
-            // Required: product names
-            foreach ($names as $pn) {
-                \App\Models\ProductNameEntry::create([
-                    'tmr_entry_id' => $tmr->id,
-                    'product_name' => $pn,
-                ]);
-            }
+            // Required: product name (single)
+            \App\Models\ProductNameEntry::create([
+                'tmr_entry_id' => $tmr->id,
+                'product_name' => $productName,
+            ]);
 
             // Required: formulation
             \App\Models\FormulationEntry::create([
                 'tmr_entry_id' => $tmr->id,
                 'actives_formulation' => $formActives,
+            ]);
+
+            // Required: technical made (one choice)
+            \App\Models\FormulationTechnicalInformationEntry::create([
+                'tmr_entry_id' => $tmr->id,
+                'technical_made_id' => $technicalMadeId,
+            ]);
+
+            // Required: indication
+            \App\Models\IndicationEntry::create([
+                'tmr_entry_id' => $tmr->id,
+                'indication' => $indication,
+            ]);
+
+            // Required: product category
+            \App\Models\ProductCategoryEntry::create([
+                'tmr_entry_id' => $tmr->id,
+                'product_category' => $productCategory,
             ]);
 
             // Mark invite used and draft finalized

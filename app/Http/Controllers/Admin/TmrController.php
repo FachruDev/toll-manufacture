@@ -29,7 +29,7 @@ class TmrController extends Controller
 
     public function print(TmrEntry $tmr)
     {
-        $tmr->load(['contactInformation','productNames','approvals','customer']);
+        $tmr->load(['contactInformation','productNames','formulation','technicalInfo.technicalMade','indication','productCategory','approvals','customer']);
         return view('admin.tmrs.print', compact('tmr'));
     }
 

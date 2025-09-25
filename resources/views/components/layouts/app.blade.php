@@ -9,8 +9,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200">
-    <div class="min-h-screen flex items-center justify-center p-4">
-        <div class="w-full max-w-lg">
+    <div class="min-h-screen">
+        <div class="w-full">
             @if(session('success'))
                 <div class="toast toast-top toast-end">
                     <div class="alert alert-success">

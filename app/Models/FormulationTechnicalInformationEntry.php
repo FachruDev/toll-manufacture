@@ -14,5 +14,9 @@ class FormulationTechnicalInformationEntry extends Model
     {
         return $this->belongsTo(TmrEntry::class, 'tmr_entry_id');
     }
-}
 
+    public function technicalMade()
+    {
+        return $this->belongsTo(TechnicalMade::class, 'technical_made_id');
+    }
+}

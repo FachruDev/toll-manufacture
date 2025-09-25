@@ -38,11 +38,14 @@
             ['E-mail', $c->email ?? ''],
             ['Product Name', $pn->pluck('product_name')->filter()->implode(', ')],
             ['Actives / Formulation', optional($tmr->formulation)->actives_formulation ?? ''],
+            ['Formulation & Technical Info by', optional(optional($tmr->technicalInfo)->technicalMade)->title ?? ''],
+            ['Indication', optional($tmr->indication)->indication ?? ''],
+            ['Product Category', optional($tmr->productCategory)->product_category ?? ''],
         ])
         @endphp
         @foreach($rows as $i => $row)
             <tr>
-                <td class="roman">{{ [1=>'I','II','III','IV','V','VI','VII','VIII'][$i+1] ?? ($i+1) }}.</td>
+                <td class="roman">{{ [1=>'I','II','III','IV','V','VI','VII','VIII','IX','X','XI'][$i+1] ?? ($i+1) }}.</td>
                 <td class="label">{{ $row[0] }}</td>
                 <td>:</td>
                 <td>{{ $row[1] }}</td>
@@ -56,4 +59,3 @@
     </script>
 </body>
 </html>
-

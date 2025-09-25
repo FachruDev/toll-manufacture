@@ -34,7 +34,7 @@ class PublicTmrController extends Controller
     public function printByUuid(string $uuid)
     {
         $tmr = \App\Models\TmrEntry::where('public_uuid', $uuid)->firstOrFail();
-        $tmr->load(['contactInformation','productNames','approvals','customer']);
+        $tmr->load(['contactInformation','productNames','formulation','technicalInfo.technicalMade','indication','productCategory','approvals','customer']);
         return view('admin.tmrs.print', compact('tmr'));
     }
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as Ad
 use App\Http\Controllers\PublicTmrController;
 use App\Http\Controllers\Admin\TmrController as AdminTmrController;
 use App\Http\Controllers\Admin\TmrInviteController as AdminTmrInviteController;
+use App\Http\Controllers\Admin\Master\TechnicalMadeController as AdminTechnicalMadeController;
 use App\Http\Controllers\PublicTmrDraftController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
@@ -118,6 +119,9 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     // TMR Invites
     Route::resource('tmr-invites', AdminTmrInviteController::class)->parameters(['tmr-invites' => 'tmr_invite'])->only(['index','create','store','show','destroy']);
     Route::post('tmr-invites/bulk-delete', [AdminTmrInviteController::class, 'bulkDelete'])->name('tmr-invites.bulk-delete');
+
+    // Masters
+    Route::resource('technical-mades', AdminTechnicalMadeController::class)->parameters(['technical-mades' => 'technical_made']);
 });
 
 // ===========================================================

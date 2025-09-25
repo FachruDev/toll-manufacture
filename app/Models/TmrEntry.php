@@ -17,6 +17,7 @@ class TmrEntry extends Model
 
     protected $casts = [
         'submitted_at' => 'datetime',
+        'request_date' => 'date',
     ];
 
     public function customer(): BelongsTo
@@ -58,5 +59,20 @@ class TmrEntry extends Model
     public function formulation()
     {
         return $this->hasOne(FormulationEntry::class);
+    }
+
+    public function technicalInfo()
+    {
+        return $this->hasOne(FormulationTechnicalInformationEntry::class);
+    }
+
+    public function indication()
+    {
+        return $this->hasOne(IndicationEntry::class);
+    }
+
+    public function productCategory()
+    {
+        return $this->hasOne(ProductCategoryEntry::class);
     }
 }
