@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\UserManagement\PermissionController as AdminPermi
 use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as AdminPermissionCategoryController;
 use App\Http\Controllers\PublicTmrController;
 use App\Http\Controllers\Admin\TmrController as AdminTmrController;
+use App\Http\Controllers\Admin\TmrInviteController as AdminTmrInviteController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -101,8 +102,11 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     // TMR Admin
     Route::get('/tmrs', [AdminTmrController::class, 'index'])->name('admin.tmrs.index');
     Route::get('/tmrs/{tmr}', [AdminTmrController::class, 'show'])->name('admin.tmrs.show');
-    Route::post('/tmrs/{tmr}/approve', [AdminTmrController::class, 'approve'])->name('admin.tmrs.approve');
-    Route::post('/tmrs/{tmr}/reject', [AdminTmrController::class, 'reject'])->name('admin.tmrs.reject');
+    Route::post('/tmrs/{tmr}/approve', [AdminTmrController::class, 'approve'])->middleware('permission:change-status-tmr')->name('admin.tmrs.approve');
+    Route::post('/tmrs/{tmr}/reject', [AdminTmrController::class, 'reject'])->middleware('permission:change-status-tmr')->name('admin.tmrs.reject');
+
+    // TMR Invites (no backend permission middleware; enforced on UI later)
+    Route::resource('tmr-invites', AdminTmrInviteController::class)->parameters(['tmr-invites' => 'tmr_invite'])->only(['index','create','store','show','destroy']);
 });
 
 // ===========================================================
