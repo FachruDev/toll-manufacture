@@ -154,7 +154,7 @@
             </div>
         </div>
 
-        <!-- Permission Section -->
+        <!-- Master Data Section -->
         <div class="space-y-1">
             <div class="collapse collapse-arrow">
                 <input type="checkbox" x-model="settingsOpen" class="peer">
@@ -178,14 +178,37 @@
             </div>
         </div>
 
+        <!-- TMR Section -->
+        <div class="space-y-1">
+            <div class="collapse collapse-arrow">
+                <input type="checkbox" x-model="settingsOpen" class="peer">
+                <div class="collapse-title flex items-center px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wider sidebar-text min-h-0 p-0">
+                    <button @click="settingsOpen = !settingsOpen"
+                        class="flex items-center w-full px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium">
+                        <x-heroicon-o-ticket class="mr-2"/>
+                        <span>Manage TMR</span>
+                    </button>
+                </div>
+                <div class="collapse-content" x-show="settingsOpen" x-transition>
+                    <div class="space-y-1 pl-2">
+                        @can('view-invite-tmr')
+                        <a href="{{ route('tmr-invites.index') }}"
+                            class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('admin.settings.mail.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                            <x-heroicon-o-chevron-right class="mx-2 p-1" />
+                            <span class="sidebar-text">Invite TMR</span>
+                        </a>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </nav>
 </div>
 
 <script>
-    if (typeof Alpine === 'undefined') {
-        console.log(
-                'Please include Alpine.js in your layout: <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer>
-</script>');
+if (typeof Alpine === 'undefined') {
+    console.log('Please include Alpine.js in your layout: <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>');
 }
 </script>

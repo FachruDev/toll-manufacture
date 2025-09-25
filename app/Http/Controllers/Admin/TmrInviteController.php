@@ -10,9 +10,12 @@ use Illuminate\Support\Str;
 
 class TmrInviteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $invites = TmrInvite::latest('id')->paginate(20);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $invites = TmrInvite::with('creator')->latest('id')->paginate($perPage);
         return response()->view('admin.tmr-invites.index', compact('invites'));
     }
 
@@ -29,7 +32,7 @@ class TmrInviteController extends Controller
             'meta' => ['nullable','array'],
         ]);
 
-        $expires = now()->addDays($data['expires_in_days'] ?? 7);
+        $expires = now()->addDays((int)($data['expires_in_days'] ?? 7));
 
         $invite = TmrInvite::create([
             'token' => (string) Str::uuid(),
@@ -40,7 +43,7 @@ class TmrInviteController extends Controller
         ]);
 
         // Return plain token and public link to be copied manually
-        return redirect()->route('admin.tmr-invites.index')
+        return redirect()->route('tmr-invites.index')
             ->with('success', 'Invite created: '.url('/tmr/invite/'.$invite->token));
     }
 
@@ -53,6 +56,13 @@ class TmrInviteController extends Controller
     {
         $tmr_invite->delete();
         return back()->with('success', 'Invite deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('invite_ids', []);
+        TmrInvite::whereIn('id', $ids)->delete();
+        return redirect()->route('tmr-invites.index')->with('success', 'Selected invites deleted successfully.');
     }
 }
 

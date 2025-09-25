@@ -105,8 +105,9 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::post('/tmrs/{tmr}/approve', [AdminTmrController::class, 'approve'])->middleware('permission:change-status-tmr')->name('admin.tmrs.approve');
     Route::post('/tmrs/{tmr}/reject', [AdminTmrController::class, 'reject'])->middleware('permission:change-status-tmr')->name('admin.tmrs.reject');
 
-    // TMR Invites (no backend permission middleware; enforced on UI later)
+    // TMR Invites
     Route::resource('tmr-invites', AdminTmrInviteController::class)->parameters(['tmr-invites' => 'tmr_invite'])->only(['index','create','store','show','destroy']);
+    Route::post('tmr-invites/bulk-delete', [AdminTmrInviteController::class, 'bulkDelete'])->name('tmr-invites.bulk-delete');
 });
 
 // ===========================================================
