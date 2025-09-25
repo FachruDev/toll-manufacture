@@ -57,11 +57,9 @@
                                     </td>
                                     <td>
                                         <div class="flex space-x-2">
-                                            @can('edit-product-char-groups')
                                             <a href="{{ route('product-char-groups.edit', $item) }}" class="tooltip tooltip-top btn btn-ghost btn-sm" data-tip="Edit Product Char Group">
                                                 <x-heroicon-o-pencil-square class="h-4 w-4"/>
                                             </a>
-                                            @endcan
                                             @can('delete-product-char-groups')
                                             <form method="POST" action="{{ route('product-char-groups.destroy', $item) }}" class="inline">
                                                 @csrf
