@@ -67,6 +67,30 @@ class PermissionCategoriesSeeder extends Seeder
                     'view-mail','edit-mail',
                 ],
             ],
+            'tmr-invites' => [
+                'label' => 'Permissions TMR Invites',
+                'description' => 'Semua permission untuk manajemen TMR Invites',
+                'sort' => 60,
+                'perms' => [
+                    'view-invite-tmr','create-invite-tmr','delete-invite-tmr',
+                ],
+            ],
+            'tmr' => [
+                'label' => 'Permissions TMR',
+                'description' => 'Semua permission untuk manajemen TMR',
+                'sort' => 70,
+                'perms' => [
+                    'change-status-tmr','view-tmr','create-tmr','edit-tmr','delete-tmr',
+                ],
+            ],
+            'technical-mades' => [
+                'label' => 'Permissions Technical Mades',
+                'description' => 'Semua permission untuk manajemen Technical Mades',
+                'sort' => 80,
+                'perms' => [
+                    'view-technical-mades','create-technical-mades','edit-technical-mades','delete-technical-mades',
+                ],
+            ],
         ];
 
         foreach ($map as $key => $cfg) {

@@ -9,9 +9,12 @@ use Illuminate\Validation\Rule;
 
 class TechnicalMadeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = TechnicalMade::orderBy('title')->paginate(20);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $items = TechnicalMade::orderBy('title')->paginate($perPage);
         return response()->view('admin.masters.technical_mades.index', compact('items'));
     }
 
@@ -28,9 +31,9 @@ class TechnicalMadeController extends Controller
         ]);
         TechnicalMade::create([
             'title' => $data['title'],
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active', false),
         ]);
-        return redirect()->route('admin.masters.technical-mades.index')->with('success','Saved');
+        return redirect()->route('technical-mades.index')->with('success','Saved');
     }
 
     public function edit(TechnicalMade $technical_made)
@@ -46,15 +49,22 @@ class TechnicalMadeController extends Controller
         ]);
         $technical_made->update([
             'title' => $data['title'],
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active', false),
         ]);
-        return redirect()->route('admin.masters.technical-mades.index')->with('success','Updated');
+        return redirect()->route('technical-mades.index')->with('success','Updated');
     }
 
     public function destroy(TechnicalMade $technical_made)
     {
         $technical_made->delete();
         return back()->with('success','Deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('item_ids', []);
+        TechnicalMade::whereIn('id', $ids)->delete();
+        return redirect()->route('technical-mades.index')->with('success', 'Selected technical mades deleted successfully.');
     }
 }
 

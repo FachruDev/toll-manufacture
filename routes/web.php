@@ -120,8 +120,15 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::resource('tmr-invites', AdminTmrInviteController::class)->parameters(['tmr-invites' => 'tmr_invite'])->only(['index','create','store','show','destroy']);
     Route::post('tmr-invites/bulk-delete', [AdminTmrInviteController::class, 'bulkDelete'])->name('tmr-invites.bulk-delete');
 
+// ===========================================================
+//                           MASTER
+// ===========================================================
+
     // Masters
     Route::resource('technical-mades', AdminTechnicalMadeController::class)->parameters(['technical-mades' => 'technical_made']);
+    Route::post('technical-mades/bulk-delete', [AdminTechnicalMadeController::class, 'bulkDelete'])->name('technical-mades.bulk-delete');
+
+    
 });
 
 // ===========================================================

@@ -28,6 +28,8 @@ class PermissionsSeeder extends Seeder
             'view-invite-tmr', 'create-invite-tmr', 'delete-invite-tmr',
             // TMR
             'change-status-tmr', 'view-tmr', 'create-tmr', 'edit-tmr', 'delete-tmr',
+            // Technical Mades
+            'view-technical-mades', 'create-technical-mades', 'edit-technical-mades', 'delete-technical-mades',
         ];
 
         foreach ($permissions as $name) {

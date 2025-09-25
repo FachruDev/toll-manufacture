@@ -168,11 +168,14 @@
                 </div>
                 <div class="collapse-content" x-show="settingsOpen" x-transition>
                     <div class="space-y-1 pl-2">
-                        <a href="{{ route('admin.settings.mail.edit') }}"
-                            class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('admin.settings.mail.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                        @can('view-technical-mades')
+                        <a href="{{ route('technical-mades.index') }}"
+                            class="flex items-center px-3 py-2 text-sm font-normal rounded-lg transition-colors {{ request()->routeIs('admin.masters.technical-mades.*') ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100' }}">
                             <x-heroicon-o-chevron-right class="mx-2 p-1" />
-                            <span class="sidebar-text">Mail Settings</span>
+                            <span class="sidebar-text">Technical Mades</span>
                         </a>
+                        @endcan
+
                     </div>
                 </div>
             </div>
