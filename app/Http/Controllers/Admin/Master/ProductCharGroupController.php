@@ -9,9 +9,12 @@ use Illuminate\Validation\Rule;
 
 class ProductCharGroupController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = ProductCharGroup::orderBy('title')->paginate(20);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $items = ProductCharGroup::orderBy('title')->paginate($perPage);
         return response()->view('admin.masters.product_char_groups.index', compact('items'));
     }
 
@@ -28,9 +31,9 @@ class ProductCharGroupController extends Controller
         ]);
         ProductCharGroup::create([
             'title' => $data['title'],
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active', false),
         ]);
-        return redirect()->route('admin.masters.product-char-groups.index')->with('success','Saved');
+        return redirect()->route('product-char-groups.index')->with('success','Saved');
     }
 
     public function edit(ProductCharGroup $product_char_group)
@@ -46,15 +49,22 @@ class ProductCharGroupController extends Controller
         ]);
         $product_char_group->update([
             'title' => $data['title'],
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active', false),
         ]);
-        return redirect()->route('admin.masters.product-char-groups.index')->with('success','Updated');
+        return redirect()->route('product-char-groups.index')->with('success','Updated');
     }
 
     public function destroy(ProductCharGroup $product_char_group)
     {
         $product_char_group->delete();
         return back()->with('success','Deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('item_ids', []);
+        ProductCharGroup::whereIn('id', $ids)->delete();
+        return redirect()->route('product-char-groups.index')->with('success', 'Selected product char groups deleted successfully.');
     }
 }
 

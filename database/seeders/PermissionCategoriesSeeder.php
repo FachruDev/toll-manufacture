@@ -91,6 +91,14 @@ class PermissionCategoriesSeeder extends Seeder
                     'view-technical-mades','create-technical-mades','edit-technical-mades','delete-technical-mades',
                 ],
             ],
+            'product-char-groups' => [
+                'label' => 'Permissions Product Char Groups',
+                'description' => 'Semua permission untuk manajemen Product Char Groups',
+                'sort' => 90,
+                'perms' => [
+                    'view-product-char-groups','create-product-char-groups','edit-product-char-groups','delete-product-char-groups',
+                ],
+            ],
         ];
 
         foreach ($map as $key => $cfg) {

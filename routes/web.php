@@ -131,8 +131,9 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     Route::resource('product-char-groups', AdminProductCharGroupController::class)->parameters(['product-char-groups' => 'product_char_group']);
     Route::resource('product-char-details', AdminProductCharDetailController::class)->parameters(['product-char-details' => 'product_char_detail']);
     Route::post('technical-mades/bulk-delete', [AdminTechnicalMadeController::class, 'bulkDelete'])->name('technical-mades.bulk-delete');
+    Route::post('product-char-groups/bulk-delete', [AdminProductCharGroupController::class, 'bulkDelete'])->name('product-char-groups.bulk-delete');
 
-    
+
 });
 
 // ===========================================================
