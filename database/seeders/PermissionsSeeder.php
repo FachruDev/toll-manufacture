@@ -24,6 +24,10 @@ class PermissionsSeeder extends Seeder
             'view-roles', 'create-roles', 'edit-roles', 'delete-roles',
             // Mail settings
             'view-mail', 'edit-mail',
+            // TMR Invites
+            'view-invite-tmr', 'create-invite-tmr', 'delete-invite-tmr',
+            // TMR
+            'change-status-tmr', 'view-tmr', 'create-tmr', 'edit-tmr', 'delete-tmr',
         ];
 
         foreach ($permissions as $name) {
