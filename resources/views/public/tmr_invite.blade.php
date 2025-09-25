@@ -124,6 +124,45 @@
                 </div>
             </div>
 
+            <!-- Section XII. Desired Format / Product Characteristic -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-primary mb-6">XII. Desired Format / Product Characteristic</h3>
+                <div id="desiredFormatsContainer">
+                    <!-- Template for new format entry -->
+                    <div class="format-entry border border-gray-200 rounded-lg p-4 mb-4" data-index="0">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-md font-medium">Format Entry #1</h4>
+                            <button type="button" class="btn btn-sm btn-error" onclick="removeFormatEntry(this)">Remove</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Product Char Group <span class="text-red-500">*</span></label>
+                                <select class="format-group w-full select select-primary focus:border-none" onchange="updateDetailsOptions(this)">
+                                    <option value="">Select Group</option>
+                                    @foreach($productCharGroups as $group)
+                                        <option value="{{ $group->id }}" data-details='@json($group->details)' data-title="{{ $group->title }}">{{ $group->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                <input type="text" class="format-notes w-full input input-primary focus:border-none" placeholder="Additional notes">
+                            </div>
+                        </div>
+                        <div class="details-container">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Product Characteristics</label>
+                            <div class="details-list space-y-2">
+                                <!-- Details will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="button" class="btn btn-outline btn-secondary" onclick="addFormatEntry()">Add Another Format</button>
+                    <button class="btn btn-outline btn-primary" onclick="saveDesiredFormats()">Save Section</button>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
                 <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
@@ -197,6 +236,10 @@
                 // product category
                 if(p.product_category){
                     document.getElementById('productCategory').value = p.product_category;
+                }
+                // desired formats
+                if(p.desired_formats && Array.isArray(p.desired_formats)){
+                    loadDesiredFormats(p.desired_formats);
                 }
             }
 
@@ -273,6 +316,219 @@
                     method: 'POST', headers, body: JSON.stringify({ section: 'product_category', data: v })
                 });
                 showMsg(res.ok ? 'Product category saved successfully!' : 'Save failed', res.ok);
+            }
+
+            // Desired Formats functions
+            let formatEntryCounter = 1;
+
+            function addFormatEntry() {
+                const container = document.getElementById('desiredFormatsContainer');
+                const template = container.querySelector('.format-entry').cloneNode(true);
+                formatEntryCounter++;
+
+                // Update index and title
+                template.setAttribute('data-index', formatEntryCounter - 1);
+                template.querySelector('h4').textContent = `Format Entry #${formatEntryCounter}`;
+
+                // Clear values
+                template.querySelector('.format-group').value = '';
+                template.querySelector('.format-notes').value = '';
+                template.querySelector('.details-list').innerHTML = '';
+
+                container.appendChild(template);
+            }
+
+            function removeFormatEntry(button) {
+                const entry = button.closest('.format-entry');
+                const container = document.getElementById('desiredFormatsContainer');
+                if (container.children.length > 1) {
+                    entry.remove();
+                    updateEntryTitles();
+                } else {
+                    showMsg('At least one format entry is required');
+                }
+            }
+
+            function updateEntryTitles() {
+                const entries = document.querySelectorAll('.format-entry');
+                entries.forEach((entry, index) => {
+                    entry.querySelector('h4').textContent = `Format Entry #${index + 1}`;
+                });
+                formatEntryCounter = entries.length;
+            }
+
+            function updateDetailsOptions(select) {
+                const entry = select.closest('.format-entry');
+                const detailsContainer = entry.querySelector('.details-list');
+                const selectedOption = select.options[select.selectedIndex];
+                const details = selectedOption.getAttribute('data-details');
+
+                if (!details) {
+                    detailsContainer.innerHTML = '';
+                    return;
+                }
+
+                const detailsData = JSON.parse(details);
+                let html = '';
+
+                detailsData.forEach(detail => {
+                    const inputType = detail.input_type || 'text';
+                    const isRequired = detail.is_required ? 'required' : '';
+                    const requiredMark = detail.is_required ? '<span class="text-red-500">*</span>' : '';
+                    
+                    let inputHtml = '';
+                    let baseClasses = 'detail-value';
+                    let outerDivClasses = 'flex items-center space-x-2';
+
+                    if (inputType === 'radio') {
+                        const titleParts = detail.field_title.split(':');
+                        const groupName = titleParts.length > 1 ? titleParts[0].trim().replace(/\s+/g, '-') : `radio-group-${detail.id}`;
+                        const labelText = titleParts.length > 1 ? titleParts.slice(1).join(':').trim() : detail.field_title;
+
+                        inputHtml = `<input type="radio" name="char-radio-${groupName}" value="${labelText}" class="${baseClasses} radio radio-primary" data-detail-id="${detail.id}" ${isRequired}>`;
+                        
+                        html += `
+                            <div class="${outerDivClasses}">
+                                <label class="label cursor-pointer space-x-2">
+                                    ${inputHtml}
+                                    <span class="label-text">${labelText} ${requiredMark}</span> 
+                                </label>
+                            </div>
+                        `;
+                    } else if (inputType === 'checkbox') {
+                        inputHtml = `<input type="checkbox" class="${baseClasses} checkbox checkbox-primary" data-detail-id="${detail.id}" ${isRequired}>`;
+                        html += `
+                            <div class="${outerDivClasses}">
+                                <label class="label cursor-pointer space-x-2">
+                                    ${inputHtml}
+                                    <span class="label-text">${detail.field_title} ${requiredMark}</span> 
+                                </label>
+                            </div>
+                        `;
+                    } 
+                    else {
+                        inputHtml = `<input type="${inputType}" class="${baseClasses} flex-1 input input-primary input-sm focus:border-none"
+                                   data-detail-id="${detail.id}" placeholder="Enter value" ${isRequired}>`;
+                        html += `
+                            <div class="${outerDivClasses}">
+                                <label class="flex-1 text-sm font-medium">${detail.field_title} ${requiredMark}</label>
+                                ${inputHtml}
+                            </div>
+                        `;
+                    }
+                });
+
+                detailsContainer.innerHTML = html;
+            }
+
+            async function saveDesiredFormats() {
+                const entries = document.querySelectorAll('.format-entry');
+                const desiredFormats = [];
+
+                for (const entry of entries) {
+                    const groupSelect = entry.querySelector('.format-group');
+                    const groupId = groupSelect.value;
+                    const notes = entry.querySelector('.format-notes').value.trim();
+
+                    if (!groupId) {
+                        showMsg('Please select a product char group for all entries');
+                        return;
+                    }
+
+                    const formatData = {
+                        product_char_group_id: parseInt(groupId),
+                        notes: notes || null,
+                        details: []
+                    };
+
+                    const detailInputs = entry.querySelectorAll('.detail-value');
+                    detailInputs.forEach(input => {
+                        const detailId = input.getAttribute('data-detail-id');
+                        const value = input.value.trim();
+                        if (value || input.hasAttribute('required')) {
+                            formatData.details.push({
+                                product_char_detail_id: parseInt(detailId),
+                                value: value
+                            });
+                        }
+                    });
+
+                    desiredFormats.push(formatData);
+                }
+
+                const res = await fetch(`${base}/tmr/invite/${token}/draft`, {
+                    method: 'POST', headers, body: JSON.stringify({ section: 'desired_formats', data: desiredFormats })
+                });
+                showMsg(res.ok ? 'Desired formats saved successfully!' : 'Save failed', res.ok);
+            }
+
+            function loadDesiredFormats(desiredFormats) {
+                const container = document.getElementById('desiredFormatsContainer');
+                container.innerHTML = ''; // Clear existing entries
+
+                desiredFormats.forEach((format, index) => {
+                    const template = createFormatEntryTemplate(index + 1);
+                    container.appendChild(template);
+
+                    const entry = container.lastElementChild;
+                    const groupSelect = entry.querySelector('.format-group');
+                    const notesInput = entry.querySelector('.format-notes');
+
+                    // Set group
+                    groupSelect.value = format.product_char_group_id;
+                    notesInput.value = format.notes || '';
+
+                    // Trigger details loading
+                    updateDetailsOptions(groupSelect);
+
+                    // Set detail values after a short delay to allow DOM update
+                    setTimeout(() => {
+                        if (format.details && Array.isArray(format.details)) {
+                            format.details.forEach(detail => {
+                                const input = entry.querySelector(`.detail-value[data-detail-id="${detail.product_char_detail_id}"]`);
+                                if (input) {
+                                    input.value = detail.value || '';
+                                }
+                            });
+                        }
+                    }, 100);
+                });
+
+                formatEntryCounter = desiredFormats.length;
+            }
+
+            function createFormatEntryTemplate(entryNumber) {
+                const template = document.createElement('div');
+                template.className = 'format-entry border border-gray-200 rounded-lg p-4 mb-4';
+                template.setAttribute('data-index', entryNumber - 1);
+                template.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-md font-medium">Format Entry #${entryNumber}</h4>
+                        <button type="button" class="btn btn-sm btn-error" onclick="removeFormatEntry(this)">Remove</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Product Char Group <span class="text-red-500">*</span></label>
+                            <select class="format-group w-full select select-primary focus:border-none" onchange="updateDetailsOptions(this)">
+                                <option value="">Select Group</option>
+                                @foreach($productCharGroups as $group)
+                                    <option value="{{ $group->id }}" data-details='@json($group->details)' data-title="{{ $group->title }}">{{ $group->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                            <input type="text" class="format-notes w-full input input-primary focus:border-none" placeholder="Additional notes">
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Product Characteristics</label>
+                        <div class="details-list space-y-2">
+                            <!-- Details will be populated dynamically -->
+                        </div>
+                    </div>
+                `;
+                return template;
             }
 
             async function finalizeSubmit() {

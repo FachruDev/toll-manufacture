@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\InformationContactTmrEntry;
+use App\Models\ProductCharDetail;
+use App\Models\ProductCharGroup;
 use App\Models\TmrEntry;
 use App\Models\TmrInvite;
 use App\Models\TechnicalMade;
@@ -29,8 +31,11 @@ class PublicTmrController extends Controller
         }
 
         $technicalMades = TechnicalMade::where('is_active', true)->orderBy('title')->get();
+        $productCharGroups = ProductCharGroup::where('is_active', true)->with(['details' => function($q) {
+            $q->orderBy('field_title');
+        }])->orderBy('title')->get();
 
-        return view('public.tmr_invite', ['invite' => $invite, 'technicalMades' => $technicalMades]);
+        return view('public.tmr_invite', ['invite' => $invite, 'technicalMades' => $technicalMades, 'productCharGroups' => $productCharGroups]);
     }
 
     public function printByUuid(string $uuid)
