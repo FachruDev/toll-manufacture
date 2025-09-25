@@ -80,6 +80,50 @@
                 </div>
             </div>
 
+            <!-- Section IX. Technical Made -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-primary mb-6">IX. Technical Made</h3>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Technical Made <span class="text-red-500">*</span></label>
+                    <select id="technicalMade" class="w-full select select-primary focus:border-none">
+                        <option value="">Select Technical Made</option>
+                        @foreach($technicalMades as $technicalMade)
+                            <option value="{{ $technicalMade->id }}">{{ $technicalMade->title }}</option>
+                        @endforeach
+                    </select>
+                    <p id="errTechnicalMade" class="mt-1 text-sm text-red-600 hidden">Technical made is required</p>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button class="btn btn-outline btn-primary" onclick="saveTechnicalMade()">Save Section</button>
+                </div>
+            </div>
+
+            <!-- Section X. Indication -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-primary mb-6">X. Indication</h3>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Indication <span class="text-red-500">*</span></label>
+                    <textarea id="indication" placeholder="Describe product indication..." class="w-full textarea textarea-primary focus:border-none" rows="4"></textarea>
+                    <p id="errIndication" class="mt-1 text-sm text-red-600 hidden">Indication is required</p>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button class="btn btn-outline btn-primary" onclick="saveIndication()">Save Section</button>
+                </div>
+            </div>
+
+            <!-- Section XI. Product Category -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-6">
+                <h3 class="text-lg font-semibold text-primary mb-6">XI. Product Category</h3>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Product Category <span class="text-red-500">*</span></label>
+                    <input id="productCategory" type="text" placeholder="e.g. Pharmaceutical, Cosmetic, etc." class="w-full input input-primary focus:border-none">
+                    <p id="errProductCategory" class="mt-1 text-sm text-red-600 hidden">Product category is required</p>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button class="btn btn-outline btn-primary" onclick="saveProductCategory()">Save Section</button>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
                 <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
@@ -142,6 +186,18 @@
                 if(p.formulation){
                     formulation.value = p.formulation.actives_formulation || '';
                 }
+                // technical made
+                if(p.technical_made_id){
+                    document.getElementById('technicalMade').value = p.technical_made_id;
+                }
+                // indication
+                if(p.indication){
+                    document.getElementById('indication').value = p.indication;
+                }
+                // product category
+                if(p.product_category){
+                    document.getElementById('productCategory').value = p.product_category;
+                }
             }
 
             async function saveContact() {
@@ -187,6 +243,36 @@
                     method: 'POST', headers, body: JSON.stringify({ section: 'formulation', data })
                 });
                 showMsg(res.ok ? 'Formulation saved successfully!' : 'Save failed', res.ok);
+            }
+
+            async function saveTechnicalMade() {
+                const v = document.getElementById('technicalMade').value.trim();
+                if(!v){ document.getElementById('errTechnicalMade').classList.remove('hidden'); showMsg('Technical made is required'); return; }
+                document.getElementById('errTechnicalMade').classList.add('hidden');
+                const res = await fetch(`${base}/tmr/invite/${token}/draft`, {
+                    method: 'POST', headers, body: JSON.stringify({ section: 'technical_made_id', data: parseInt(v) })
+                });
+                showMsg(res.ok ? 'Technical made saved successfully!' : 'Save failed', res.ok);
+            }
+
+            async function saveIndication() {
+                const v = document.getElementById('indication').value.trim();
+                if(!v){ document.getElementById('errIndication').classList.remove('hidden'); showMsg('Indication is required'); return; }
+                document.getElementById('errIndication').classList.add('hidden');
+                const res = await fetch(`${base}/tmr/invite/${token}/draft`, {
+                    method: 'POST', headers, body: JSON.stringify({ section: 'indication', data: v })
+                });
+                showMsg(res.ok ? 'Indication saved successfully!' : 'Save failed', res.ok);
+            }
+
+            async function saveProductCategory() {
+                const v = document.getElementById('productCategory').value.trim();
+                if(!v){ document.getElementById('errProductCategory').classList.remove('hidden'); showMsg('Product category is required'); return; }
+                document.getElementById('errProductCategory').classList.add('hidden');
+                const res = await fetch(`${base}/tmr/invite/${token}/draft`, {
+                    method: 'POST', headers, body: JSON.stringify({ section: 'product_category', data: v })
+                });
+                showMsg(res.ok ? 'Product category saved successfully!' : 'Save failed', res.ok);
             }
 
             async function finalizeSubmit() {

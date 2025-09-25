@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\InformationContactTmrEntry;
 use App\Models\TmrEntry;
 use App\Models\TmrInvite;
-use App\Models\InformationContactTmrEntry;
+use App\Models\TechnicalMade;
 use App\Notifications\TmrSubmittedNotification;
 use App\Services\NotificationTargetResolver;
 use App\Services\TmrNumberService;
@@ -28,7 +28,9 @@ class PublicTmrController extends Controller
             ]);
         }
 
-        return view('public.tmr_invite', ['invite' => $invite]);
+        $technicalMades = TechnicalMade::where('is_active', true)->orderBy('title')->get();
+
+        return view('public.tmr_invite', ['invite' => $invite, 'technicalMades' => $technicalMades]);
     }
 
     public function printByUuid(string $uuid)
