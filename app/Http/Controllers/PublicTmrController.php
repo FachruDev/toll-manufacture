@@ -20,11 +20,15 @@ class PublicTmrController extends Controller
         abort_if($invite->used_at, 410, 'Invitation already used');
         abort_if(now()->greaterThan($invite->expires_at), 410, 'Invitation expired');
 
-        return response()->json([
-            'token' => $invite->token,
-            'email' => $invite->email,
-            'expires_at' => $invite->expires_at,
-        ]);
+        if (request()->wantsJson()) {
+            return response()->json([
+                'token' => $invite->token,
+                'email' => $invite->email,
+                'expires_at' => $invite->expires_at,
+            ]);
+        }
+
+        return view('public.tmr_invite', ['invite' => $invite]);
     }
 
     public function submit(Request $request, string $token)
@@ -72,4 +76,3 @@ class PublicTmrController extends Controller
         ]);
     }
 }
-

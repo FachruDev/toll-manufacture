@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserManagement\PermissionCategoryController as Ad
 use App\Http\Controllers\PublicTmrController;
 use App\Http\Controllers\Admin\TmrController as AdminTmrController;
 use App\Http\Controllers\Admin\TmrInviteController as AdminTmrInviteController;
+use App\Http\Controllers\PublicTmrDraftController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PasswordController;
@@ -41,6 +42,11 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->na
 // Public TMR (guest via token)
 Route::get('/tmr/invite/{token}', [PublicTmrController::class, 'show'])->name('tmr.invite.show');
 Route::post('/tmr/invite/{token}', [PublicTmrController::class, 'submit'])->name('tmr.invite.submit');
+
+// Draft endpoints (sectional saving)
+Route::get('/tmr/invite/{token}/draft', [PublicTmrDraftController::class, 'show'])->name('tmr.invite.draft.show');
+Route::post('/tmr/invite/{token}/draft', [PublicTmrDraftController::class, 'save'])->name('tmr.invite.draft.save');
+Route::post('/tmr/invite/{token}/finalize', [PublicTmrDraftController::class, 'finalize'])->name('tmr.invite.finalize');
 
 // Email Verification
 Route::get('/email/verify', function () {
