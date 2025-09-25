@@ -10,15 +10,22 @@ class UsersSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::firstOrCreate(
+        $user1 = User::firstOrCreate(
             ['email' => 'fachru2006@gmail.com'],
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
             ]
         );
+        $user1->syncRoles(['superadmin']);
 
-        $user->syncRoles(['superadmin']);
+        $user2 = User::firstOrCreate(
+            ['email' => 'superadmin@example.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $user2->syncRoles(['superadmin']);
     }
 }
-
