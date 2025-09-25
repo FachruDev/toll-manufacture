@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 
 class ProductCharDetailController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = ProductCharDetail::with('group')->orderBy('product_char_group_id')->orderBy('id')->paginate(30);
+        $perPage = $request->get('per_page', 12);
+        $perPage = min((int)$perPage, 100);
+
+        $items = ProductCharDetail::with('group')->orderBy('product_char_group_id')->orderBy('id')->paginate($perPage);
         return response()->view('admin.masters.product_char_details.index', compact('items'));
     }
 
@@ -35,7 +38,7 @@ class ProductCharDetailController extends Controller
             'input_type' => $data['input_type'] ?? 'text',
             'is_required' => $request->boolean('is_required', false),
         ]);
-        return redirect()->route('admin.masters.product-char-details.index')->with('success','Saved');
+        return redirect()->route('product-char-details.index')->with('success','Saved');
     }
 
     public function edit(ProductCharDetail $product_char_detail)
@@ -58,13 +61,20 @@ class ProductCharDetailController extends Controller
             'input_type' => $data['input_type'] ?? 'text',
             'is_required' => $request->boolean('is_required', false),
         ]);
-        return redirect()->route('admin.masters.product-char-details.index')->with('success','Updated');
+        return redirect()->route('product-char-details.index')->with('success','Updated');
     }
 
     public function destroy(ProductCharDetail $product_char_detail)
     {
         $product_char_detail->delete();
         return back()->with('success','Deleted');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('item_ids', []);
+        ProductCharDetail::whereIn('id', $ids)->delete();
+        return redirect()->route('product-char-details.index')->with('success', 'Selected product char details deleted successfully.');
     }
 }
 

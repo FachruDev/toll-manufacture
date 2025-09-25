@@ -99,6 +99,14 @@ class PermissionCategoriesSeeder extends Seeder
                     'view-product-char-groups','create-product-char-groups','edit-product-char-groups','delete-product-char-groups',
                 ],
             ],
+            'product-char-details' => [
+                'label' => 'Permissions Product Char Details',
+                'description' => 'Semua permission untuk manajemen Product Char Details',
+                'sort' => 100,
+                'perms' => [
+                    'view-product-char-details','create-product-char-details','edit-product-char-details','delete-product-char-details',
+                ],
+            ],
         ];
 
         foreach ($map as $key => $cfg) {

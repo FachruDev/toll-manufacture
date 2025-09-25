@@ -32,6 +32,8 @@ class PermissionsSeeder extends Seeder
             'view-technical-mades', 'create-technical-mades', 'edit-technical-mades', 'delete-technical-mades',
             // Product Char Groups
             'view-product-char-groups', 'create-product-char-groups', 'edit-product-char-groups', 'delete-product-char-groups',
+            // Product Char Details
+            'view-product-char-details', 'create-product-char-details', 'edit-product-char-details', 'delete-product-char-details',
         ];
 
         foreach ($permissions as $name) {
