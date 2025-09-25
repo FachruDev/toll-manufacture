@@ -9,5 +9,9 @@ class ProductCharDetail extends Model
 {
     use HasFactory;
     protected $fillable = ['product_char_group_id','field_title','input_type','is_required'];
-}
 
+    public function group()
+    {
+        return $this->belongsTo(ProductCharGroup::class, 'product_char_group_id');
+    }
+}

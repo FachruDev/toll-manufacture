@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('host')->nullable();
             $table->unsignedInteger('port')->default(587);
             $table->string('encryption')->nullable(); // tls, ssl, null
+            $table->string('username')->nullable();
             $table->text('password')->nullable(); // encrypted cast
             $table->string('from_address')->nullable();
             $table->string('from_name')->nullable();

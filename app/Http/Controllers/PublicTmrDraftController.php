@@ -140,6 +140,32 @@ class PublicTmrDraftController extends Controller
                 'product_category' => $productCategory,
             ]);
 
+            // Optional: Desired Format / Product Characteristic
+            if (!empty($payload['desired_formats']) && is_array($payload['desired_formats'])) {
+                $pne = \App\Models\ProductNameEntry::where('tmr_entry_id', $tmr->id)->first();
+                foreach ($payload['desired_formats'] as $df) {
+                    $groupId = (int)($df['product_char_group_id'] ?? 0);
+                    if ($groupId <= 0) { continue; }
+                    $entry = \App\Models\DesiredFormatEntry::create([
+                        'tmr_entry_id' => $tmr->id,
+                        'product_name_entry_id' => optional($pne)->id,
+                        'product_char_group_id' => $groupId,
+                        'notes' => $df['notes'] ?? null,
+                    ]);
+                    if (!empty($df['details']) && is_array($df['details'])) {
+                        foreach ($df['details'] as $d) {
+                            $detailId = (int)($d['product_char_detail_id'] ?? 0);
+                            if ($detailId <= 0) { continue; }
+                            \App\Models\DesiredFormatDetailEntry::create([
+                                'desired_format_entry_id' => $entry->id,
+                                'product_char_detail_id' => $detailId,
+                                'value' => (string)($d['value'] ?? ''),
+                            ]);
+                        }
+                    }
+                }
+            }
+
             // Mark invite used and draft finalized
             $invite->tmr_entry_id = $tmr->id;
             $invite->used_at = now();

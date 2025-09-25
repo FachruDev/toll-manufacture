@@ -14,6 +14,8 @@ use App\Http\Controllers\PublicTmrController;
 use App\Http\Controllers\Admin\TmrController as AdminTmrController;
 use App\Http\Controllers\Admin\TmrInviteController as AdminTmrInviteController;
 use App\Http\Controllers\Admin\Master\TechnicalMadeController as AdminTechnicalMadeController;
+use App\Http\Controllers\Admin\Master\ProductCharGroupController as AdminProductCharGroupController;
+use App\Http\Controllers\Admin\Master\ProductCharDetailController as AdminProductCharDetailController;
 use App\Http\Controllers\PublicTmrDraftController;
 use App\Http\Controllers\Customer\CustomerDashboardController;
 use App\Http\Controllers\RegisterController;
@@ -126,6 +128,8 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
 
     // Masters
     Route::resource('technical-mades', AdminTechnicalMadeController::class)->parameters(['technical-mades' => 'technical_made']);
+    Route::resource('product-char-groups', AdminProductCharGroupController::class)->parameters(['product-char-groups' => 'product_char_group']);
+    Route::resource('product-char-details', AdminProductCharDetailController::class)->parameters(['product-char-details' => 'product_char_detail']);
     Route::post('technical-mades/bulk-delete', [AdminTechnicalMadeController::class, 'bulkDelete'])->name('technical-mades.bulk-delete');
 
     

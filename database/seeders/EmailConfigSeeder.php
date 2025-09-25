@@ -15,6 +15,7 @@ class EmailConfigSeeder extends Seeder
                 'send_to_roles' => json_encode(['superadmin','admin','dephead','supervisor']),
                 'send_to_users' => json_encode([]),
                 'send_to_emails'=> json_encode([]),
+                
                 'active' => true,
                 'updated_at' => now(),
                 'created_at' => now(),
