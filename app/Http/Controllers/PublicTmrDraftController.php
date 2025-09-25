@@ -63,9 +63,17 @@ class PublicTmrDraftController extends Controller
         $draft = TmrDraft::firstOrCreate(['tmr_invite_id' => $invite->id]);
         $payload = $draft->payload ?? [];
 
-        // Minimal required validation: contact section must exist
+        // Required sections: contact, product_names[], formulation.actives_formulation
         if (empty($payload['contact']) || empty($payload['contact']['company'])) {
-            return response()->json(['message' => 'Contact section incomplete'], 422);
+            return response()->json(['message' => 'Contact section incomplete', 'field' => 'contact.company'], 422);
+        }
+        $names = collect($payload['product_names'] ?? [])->map(fn($v)=> trim((string)$v))->filter();
+        if ($names->isEmpty()) {
+            return response()->json(['message' => 'Product name is required', 'field' => 'product_names'], 422);
+        }
+        $formActives = trim((string)($payload['formulation']['actives_formulation'] ?? ''));
+        if ($formActives === '') {
+            return response()->json(['message' => 'Actives/Formulation is required', 'field' => 'formulation.actives_formulation'], 422);
         }
 
         $tmr = DB::transaction(function () use ($invite, $draft, $payload) {
@@ -75,6 +83,7 @@ class PublicTmrDraftController extends Controller
                 'status' => 'submitted',
                 'submitted_email' => $invite->email,
                 'submitted_at' => now(),
+                'request_date' => !empty($payload['contact']['request_date']) ? $payload['contact']['request_date'] : now()->toDateString(),
             ]);
 
             // Persist contact info from draft
@@ -86,6 +95,20 @@ class PublicTmrDraftController extends Controller
                 'phone_number' => $contact['phone_number'] ?? null,
                 'contact_person' => $contact['contact_person'] ?? null,
                 'email' => $contact['email'] ?? null,
+            ]);
+
+            // Required: product names
+            foreach ($names as $pn) {
+                \App\Models\ProductNameEntry::create([
+                    'tmr_entry_id' => $tmr->id,
+                    'product_name' => $pn,
+                ]);
+            }
+
+            // Required: formulation
+            \App\Models\FormulationEntry::create([
+                'tmr_entry_id' => $tmr->id,
+                'actives_formulation' => $formActives,
             ]);
 
             // Mark invite used and draft finalized
@@ -108,4 +131,3 @@ class PublicTmrDraftController extends Controller
         ]);
     }
 }
-

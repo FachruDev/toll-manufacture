@@ -31,6 +31,13 @@ class PublicTmrController extends Controller
         return view('public.tmr_invite', ['invite' => $invite]);
     }
 
+    public function printByUuid(string $uuid)
+    {
+        $tmr = \App\Models\TmrEntry::where('public_uuid', $uuid)->firstOrFail();
+        $tmr->load(['contactInformation','productNames','approvals','customer']);
+        return view('admin.tmrs.print', compact('tmr'));
+    }
+
     public function submit(Request $request, string $token)
     {
         $invite = TmrInvite::where('token', $token)->lockForUpdate()->firstOrFail();

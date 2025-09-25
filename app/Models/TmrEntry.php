@@ -12,7 +12,7 @@ class TmrEntry extends Model
     use HasFactory;
 
     protected $fillable = [
-        'public_uuid', 'number', 'customer_id', 'status', 'submitted_email', 'submitted_at',
+        'public_uuid', 'number', 'customer_id', 'status', 'request_date', 'submitted_email', 'submitted_at',
     ];
 
     protected $casts = [
@@ -54,5 +54,9 @@ class TmrEntry extends Model
     {
         return $this->hasMany(ProductNameEntry::class);
     }
-}
 
+    public function formulation()
+    {
+        return $this->hasOne(FormulationEntry::class);
+    }
+}

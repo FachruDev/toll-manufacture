@@ -48,6 +48,9 @@ Route::get('/tmr/invite/{token}/draft', [PublicTmrDraftController::class, 'show'
 Route::post('/tmr/invite/{token}/draft', [PublicTmrDraftController::class, 'save'])->name('tmr.invite.draft.save');
 Route::post('/tmr/invite/{token}/finalize', [PublicTmrDraftController::class, 'finalize'])->name('tmr.invite.finalize');
 
+// Public print by uuid
+Route::get('/tmr/{uuid}/print', [PublicTmrController::class, 'printByUuid'])->name('tmr.public.print');
+
 // Email Verification
 Route::get('/email/verify', function () {
     return view('auth.verify');
@@ -108,6 +111,7 @@ Route::middleware(['auth', 'role:superadmin|admin|dephead|supervisor'])->prefix(
     // TMR Admin
     Route::get('/tmrs', [AdminTmrController::class, 'index'])->name('admin.tmrs.index');
     Route::get('/tmrs/{tmr}', [AdminTmrController::class, 'show'])->name('admin.tmrs.show');
+    Route::get('/tmrs/{tmr}/print', [AdminTmrController::class, 'print'])->name('admin.tmrs.print');
     Route::post('/tmrs/{tmr}/approve', [AdminTmrController::class, 'approve'])->middleware('permission:change-status-tmr')->name('admin.tmrs.approve');
     Route::post('/tmrs/{tmr}/reject', [AdminTmrController::class, 'reject'])->middleware('permission:change-status-tmr')->name('admin.tmrs.reject');
 

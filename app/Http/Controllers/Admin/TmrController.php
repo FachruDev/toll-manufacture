@@ -27,6 +27,12 @@ class TmrController extends Controller
         return response()->view('admin.tmrs.show', compact('tmr'));
     }
 
+    public function print(TmrEntry $tmr)
+    {
+        $tmr->load(['contactInformation','productNames','approvals','customer']);
+        return view('admin.tmrs.print', compact('tmr'));
+    }
+
     public function approve(Request $request, TmrEntry $tmr)
     {
         abort_unless($tmr->status !== 'approved', 400, 'Already approved');
@@ -74,4 +80,3 @@ class TmrController extends Controller
         return back()->with('success', 'TMR rejected');
     }
 }
-
